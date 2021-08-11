@@ -22,7 +22,6 @@ import PerfectScrollbar from "perfect-scrollbar";
 
 // core components
 import RTLNavbar from "components/Navbars/RTLNavbar.js";
-import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
@@ -33,7 +32,7 @@ import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 
 var ps;
 
-function RTL(props) {
+function RTL() {
   const location = useLocation();
   const mainPanelRef = React.useRef(null);
   const [sidebarOpened, setsidebarOpened] = React.useState(
@@ -111,7 +110,7 @@ function RTL(props) {
       }
     });
   };
-  const getBrandText = (path) => {
+  const getBrandText = () => {
     for (let i = 0; i < routes.length; i++) {
       if (location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {
         return routes[i].name;
@@ -135,17 +134,13 @@ function RTL(props) {
                 }}
                 toggleSidebar={toggleSidebar}
               />
-              <div className="main-panel" ref={mainPanelRef} data={color}>
+              <div className="main-panel" ref={mainPanelRef}>
                 <RTLNavbar
                   brandText={getBrandText(location.pathname)}
                   toggleSidebar={toggleSidebar}
                   sidebarOpened={sidebarOpened}
                 />
                 <Switch>{getRoutes(routes)}</Switch>
-                {
-                  // we don't want the Footer to be rendered on map page
-                  location.pathname === "/admin/maps" ? null : <Footer fluid />
-                }
               </div>
             </div>
             <FixedPlugin bgColor={color} handleBgClick={changeColor} />
