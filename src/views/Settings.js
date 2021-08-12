@@ -28,8 +28,15 @@ import {
   Row,
 } from 'reactstrap'
 import { ThemeContext, themes } from '../contexts/ThemeContext'
+import { datasetsStore, transformationsStore } from '../utils/localStorage'
 
 function Settings () {
+  const onRestartClick = async () => {
+    await transformationsStore.clear();
+    await datasetsStore.clear();
+    console.log("local forage has been cleared !")
+  }
+
   return (
     <>
       <div className="content settings">
@@ -77,7 +84,7 @@ function Settings () {
                 <CardTitle tag="h4">Restart the Demo</CardTitle>
               </CardHeader>
               <CardBody>
-                <Button color="danger">Restart</Button>
+                <Button color="danger" onClick={onRestartClick}>Restart</Button>
               </CardBody>
             </Card>
           </Col>

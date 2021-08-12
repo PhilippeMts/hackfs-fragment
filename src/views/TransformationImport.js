@@ -26,12 +26,15 @@ import {
   CardBody, Col, Form, FormGroup, FormText, Input, Label,
   Row,
 } from 'reactstrap'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useHistory } from 'react-router-dom'
+import { transformationsStore } from '../utils/localStorage'
 
 function TransformationImport () {
+  const history = useHistory();
   const [file, setFile] = useState(null)
   const [name, setName] = useState('')
   const [desc, setDesc] = useState('')
+  const [isPending, setIsPending] = useState(false)
 
   const onChangeFile = e => {
     setFile(e.target.files[0])
@@ -45,8 +48,19 @@ function TransformationImport () {
     setDesc(e.target.value)
   }
 
-  const onSubmit = () => {
-    // todo
+  const onSubmit = async e => {
+    e.preventDefault();
+    setIsPending(true);
+    let unsecureKey = (await transformationsStore.length()).toString();  // TODO replace w/ IPLD object CID
+    await transformationsStore.setItem(
+      unsecureKey,
+      {
+        file,
+        name,
+        desc
+      }
+    );
+    history.push("/transformations");
   }
 
 
@@ -108,7 +122,7 @@ function TransformationImport () {
                       type="textarea"
                     />
                   </FormGroup>
-                  <Button color="primary" type="submit" disabled={!file || !name}>
+                  <Button color="primary" type="submit" disabled={isPending || !file || !name}>
                     Import
                   </Button>
                 </Form>
