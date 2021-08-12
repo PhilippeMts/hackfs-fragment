@@ -19,7 +19,7 @@ import React from 'react'
 
 // reactstrap components
 import {
-  Badge,
+  Badge, Button,
   Card,
   CardBody,
   CardHeader,
@@ -58,6 +58,26 @@ function Settings () {
                     )}
                   </ThemeContext.Consumer>
                 </div>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col md="4">
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">Connect a Wallet</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Button color="primary">Connect</Button>
+              </CardBody>
+            </Card>
+          </Col>
+          <Col md="4">
+            <Card>
+              <CardHeader>
+                <CardTitle tag="h4">Restart the Demo</CardTitle>
+              </CardHeader>
+              <CardBody>
+                <Button color="danger">Restart</Button>
               </CardBody>
             </Card>
           </Col>
