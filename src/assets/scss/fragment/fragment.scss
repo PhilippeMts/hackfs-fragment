@@ -47,3 +47,15 @@
   }
 
 }
+
+.all-transformations-item {
+  > div {
+    height: 256px;
+
+    .card-body > div {
+      height: 182px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+  }
+}

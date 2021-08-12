@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 // reactstrap components
 import {
@@ -23,12 +23,30 @@ import {
   BreadcrumbItem,
   Button,
   Card,
-  CardBody, Col,
+  CardBody, CardLink, CardText, CardTitle,
+  Col,
   Row,
 } from 'reactstrap'
 import { NavLink } from 'react-router-dom'
+import { transformationsStore } from '../utils/localStorage'
 
 function Transformations () {
+
+  const [keys, setKeys] = useState([])
+  const [transformationsMap, setTransformationsMap] = useState({})
+  const getTransformations = async () => {
+    let _keys = []
+    let _transformationsMap = {}
+    await transformationsStore.iterate((v, k) => {
+      _transformationsMap[k] = v
+      _keys.push(k)
+    })
+    setTransformationsMap(_transformationsMap)
+    setKeys(_keys)
+  }
+
+  useEffect(getTransformations, [])
+
   return (
     <>
       <div className="content">
@@ -39,19 +57,38 @@ function Transformations () {
           <Col md="6">
             <Card>
               <CardBody>
-                <p>
+                <CardText>
                   Push on IPFS the Wasm bytecode of all transformations
                   you want to
                   use to process datasets.
-                </p>
+                </CardText>
                 <NavLink to="/transformations/new">
                   <Button color="primary" className={'text-center'}>Import
                     new transformation</Button>
                 </NavLink>
-
               </CardBody>
             </Card>
           </Col>
+        </Row>
+        <Row>
+          {
+            keys.map(k => transformationsMap[k]).
+              map(({ name, desc }) => (
+                <Col md="4" className="all-transformations-item">
+                  <Card>
+                    <CardBody>
+                      <div>
+                        <CardTitle>{name}</CardTitle>
+                        <CardText>{desc}</CardText>
+                      </div>
+                      <NavLink to="/transformations/todo">
+                        <CardLink>Card link</CardLink>
+                      </NavLink>
+                    </CardBody>
+                  </Card>
+                </Col>
+              ))
+          }
         </Row>
       </div>
     </>
