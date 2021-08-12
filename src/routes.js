@@ -22,8 +22,16 @@ import TableList from "views/TableList.js";
 import Typography from "views/Typography.js";
 import UserProfile from "views/UserProfile.js";
 import Settings from "./views/Settings";
+import Transformations from './views/Transformations'
 
 var routes = [
+  {
+    path: "/transformations",
+    name: "Transformations",
+    icon: "tim-icons icon-app",
+    component: Transformations,
+    layout: "/admin",
+  },
   {
     path: "/settings",
     name: "Settings",
