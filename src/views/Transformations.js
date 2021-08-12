@@ -26,6 +26,7 @@ import {
   CardBody, Col,
   Row,
 } from 'reactstrap'
+import { NavLink } from 'react-router-dom'
 
 function Transformations () {
   return (
@@ -43,8 +44,11 @@ function Transformations () {
                   you want to
                   use to process datasets.
                 </p>
-                <Button color="primary" className={'text-center'}>Import
-                  new transformation</Button>
+                <NavLink to="/transformations/new">
+                  <Button color="primary" className={'text-center'}>Import
+                    new transformation</Button>
+                </NavLink>
+
               </CardBody>
             </Card>
           </Col>

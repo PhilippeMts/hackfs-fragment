@@ -117,7 +117,7 @@ function Sidebar(props) {
             ) : null}
             <Nav>
               {routes.map((prop, key) => {
-                if (prop.redirect) return null;
+                if (prop.noNav) return null;
                 return (
                   <li
                     className={

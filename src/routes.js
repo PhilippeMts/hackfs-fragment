@@ -23,6 +23,7 @@ import Typography from "views/Typography.js";
 import UserProfile from "views/UserProfile.js";
 import Settings from "./views/Settings";
 import Transformations from './views/Transformations'
+import TransformationImport from './views/TransformationImport'
 
 var routes = [
   {
@@ -31,6 +32,14 @@ var routes = [
     icon: "tim-icons icon-app",
     component: Transformations,
     layout: "/admin",
+  },
+  {
+    path: "/transformations/new",
+    name: "Import new transformation",
+    icon: "tim-icons icon-cloud-upload-94",
+    component: TransformationImport,
+    layout: "/admin",
+    noNav: true,
   },
   {
     path: "/settings",

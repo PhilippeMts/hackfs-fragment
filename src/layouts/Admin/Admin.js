@@ -77,19 +77,22 @@ function Admin() {
     setsidebarOpened(!sidebarOpened);
   };
   const getRoutes = (routes) => {
-    return routes.map((prop, key) => {
+    let a =  routes.map((prop, key) => {
       if (prop.layout === "/admin") {
         return (
           <Route
             path={prop.path}
             component={prop.component}
             key={key}
+            exact
           />
         );
       } else {
         return null;
       }
     });
+    console.log(a);
+    return a;
   };
   const getBrandText = () => {
     for (let i = 0; i < routes.length; i++) {
