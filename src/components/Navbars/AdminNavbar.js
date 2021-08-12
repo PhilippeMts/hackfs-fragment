@@ -99,7 +99,7 @@ function AdminNavbar(props) {
           <Collapse navbar isOpen={collapseOpen}>
             <Nav className="ml-auto" navbar>
               <InputGroup className="search-bar">
-                <Button color="link" onClick={toggleModalSearch}>
+                <Button color="link" onClick={toggleModalSearch} disabled>
                   <i className="tim-icons icon-zoom-split" />
                   <span className="d-lg-none d-md-block">Search</span>
                 </Button>
