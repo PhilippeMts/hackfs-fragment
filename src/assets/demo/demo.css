@@ -68,7 +68,7 @@
 }
 
 @media all and (min-width: 992px) {
-  .sidebar .nav>li.active-pro {
+  .sidebar .nav>li.to-bottom {
     position: absolute;
     width: 100%;
     bottom: 10px;
