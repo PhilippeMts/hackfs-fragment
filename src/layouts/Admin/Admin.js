@@ -77,7 +77,7 @@ function Admin() {
     setsidebarOpened(!sidebarOpened);
   };
   const getRoutes = (routes) => {
-    let a =  routes.map((prop, key) => {
+    return routes.map((prop, key) => {
       if (prop.layout === "/admin") {
         return (
           <Route
@@ -91,8 +91,6 @@ function Admin() {
         return null;
       }
     });
-    console.log(a);
-    return a;
   };
   const getBrandText = () => {
     for (let i = 0; i < routes.length; i++) {
