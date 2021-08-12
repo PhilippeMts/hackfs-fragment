@@ -107,8 +107,8 @@ function Admin() {
             <Sidebar
               routes={routes}
               logo={{
-                outterLink: "https://www.creative-tim.com/",
-                text: "Creative Tim",
+                outterLink: "https://showcase.ethglobal.co/hackfs2021/fragment/",
+                text: "Fragment",
                 imgSrc: logo,
               }}
               toggleSidebar={toggleSidebar}
