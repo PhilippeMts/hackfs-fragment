@@ -21,8 +21,16 @@ import Notifications from "views/Notifications.js";
 import TableList from "views/TableList.js";
 import Typography from "views/Typography.js";
 import UserProfile from "views/UserProfile.js";
+import Settings from "./views/Settings";
 
 var routes = [
+  {
+    path: "/settings",
+    name: "Settings",
+    icon: "tim-icons icon-settings",
+    component: Settings,
+    layout: "/admin",
+  },
   {
     path: "/dashboard",
     name: "Dashboard",
