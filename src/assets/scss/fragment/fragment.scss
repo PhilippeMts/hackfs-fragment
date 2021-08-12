@@ -1,0 +1,49 @@
+.settings {
+  .color-label {
+    position: relative;
+    font-size: $font-size-xs;
+  }
+
+  .badge {
+    border: 2px solid $white;
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-block;
+    height: 23px;
+    margin-right: 5px;
+    position: relative;
+    width: 23px;
+  }
+
+  .badge.active,
+  .badge:hover {
+    border-color: $black-states;
+  }
+
+  .light-badge, .dark-badge {
+    top: 6px;
+    margin: 0;
+    border: 1px solid $info;
+
+    &:hover {
+      border: 1px solid $info;
+    }
+  }
+
+  .light-badge {
+    background: $white;
+
+    &:hover {
+      background: $white;
+    }
+  }
+
+  .dark-badge {
+    background: $black;
+
+    &:hover {
+      background: $black;
+    }
+  }
+
+}
