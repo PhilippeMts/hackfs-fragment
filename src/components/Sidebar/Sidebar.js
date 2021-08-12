@@ -124,7 +124,7 @@ function Sidebar(props) {
                 return (
                   <li
                     className={
-                      activeRoute(prop.path) + (prop.pro ? " active-pro" : "")
+                      activeRoute(prop.path) + (prop.pro ? " to-bottom" : "")
                     }
                     key={key}
                   >
@@ -140,10 +140,17 @@ function Sidebar(props) {
                   </li>
                 );
               })}
-              <li className="active-pro">
-                <ReactstrapNavLink href="https://www.creative-tim.com/product/black-dashboard-pro-react?ref=bdr-user-archive-sidebar-upgrade-pro">
+              <li className="to-bottom">
+                {/*icon-puzzle-10*/}
+                {/*icon-trophy*/}
+                {/*https://fs.ethglobal.co/*/}
+                <ReactstrapNavLink href="https://showcase.ethglobal.co/hackfs2021/fragment">
                   <i className="tim-icons icon-spaceship" />
-                  <p>Upgrade to PRO</p>
+                  <p>Learn more</p>
+                </ReactstrapNavLink>
+                <ReactstrapNavLink href="https://fs.ethglobal.co/">
+                  <i className="tim-icons icon-trophy" />
+                  <p>About HackFS</p>
                 </ReactstrapNavLink>
               </li>
             </Nav>

@@ -18,9 +18,9 @@
 import React from "react";
 
 // reactstrap components
-import { Button, Dropdown, DropdownToggle, Badge } from "reactstrap";
-import { ThemeContext, themes } from "contexts/ThemeContext";
-import { backgroundColors } from "contexts/BackgroundColorContext";
+import {Badge, Dropdown, DropdownToggle} from "reactstrap";
+import {ThemeContext, themes} from "contexts/ThemeContext";
+import {backgroundColors} from "contexts/BackgroundColorContext";
 
 function FixedPlugin(props) {
   const [dropDownIsOpen, setdropDownIsOpen] = React.useState(false);
@@ -83,37 +83,6 @@ function FixedPlugin(props) {
                 </>
               )}
             </ThemeContext.Consumer>
-          </li>
-          <li className="button-container">
-            <Button
-              href="https://www.creative-tim.com/product/black-dashboard-react"
-              color="primary"
-              block
-              className="btn-round"
-            >
-              Download Now
-            </Button>
-            <Button
-              color="default"
-              block
-              className="btn-round"
-              outline
-              href="https://demos.creative-tim.com/black-dashboard-react/#/documentation/tutorial"
-            >
-              Documentation
-            </Button>
-          </li>
-          <li className="header-title">Want more components?</li>
-          <li className="button-container">
-            <Button
-              href="https://www.creative-tim.com/product/black-dashboard-pro-react"
-              className="btn-round"
-              disabled
-              block
-              color="danger"
-            >
-              Get pro version
-            </Button>
           </li>
         </ul>
       </Dropdown>
