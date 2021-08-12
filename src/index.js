@@ -34,8 +34,8 @@ ReactDOM.render(
     <BackgroundColorWrapper>
       <BrowserRouter>
         <Switch>
-          <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-          <Redirect from="/" to="/admin/dashboard" />
+          <Route path="/" render={(props) => <AdminLayout {...props} />} />
+          <Redirect from="/" to="/datasets" />
         </Switch>
       </BrowserRouter>
     </BackgroundColorWrapper>
