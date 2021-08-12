@@ -141,9 +141,6 @@ function Sidebar(props) {
                 );
               })}
               <li className="to-bottom">
-                {/*icon-puzzle-10*/}
-                {/*icon-trophy*/}
-                {/*https://fs.ethglobal.co/*/}
                 <ReactstrapNavLink href="https://showcase.ethglobal.co/hackfs2021/fragment">
                   <i className="tim-icons icon-spaceship" />
                   <p>Learn more</p>
