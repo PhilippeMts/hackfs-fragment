@@ -22,8 +22,34 @@ import TableList from "views/TableList.js";
 import Typography from "views/Typography.js";
 import UserProfile from "views/UserProfile.js";
 import Settings from "./views/Settings";
+import Transformations from './views/Transformations'
+import TransformationImport from './views/TransformationImport'
+import TransformationDetails from './views/TransformationDetails'
 
 var routes = [
+  {
+    path: "/transformations",
+    name: "Transformations",
+    icon: "tim-icons icon-app",
+    component: Transformations,
+    layout: "/admin",
+  },
+  {
+    path: "/transformations/new",
+    name: "Import new transformation",
+    icon: "tim-icons icon-cloud-upload-94",
+    component: TransformationImport,
+    layout: "/admin",
+    noNav: true,
+  },
+  {
+    path: "/transformations/:id",
+    name: "Transformation details",
+    icon: "tim-icons icon-paper",
+    component: TransformationDetails,
+    layout: "/admin",
+    noNav: true,
+  },
   {
     path: "/settings",
     name: "Settings",

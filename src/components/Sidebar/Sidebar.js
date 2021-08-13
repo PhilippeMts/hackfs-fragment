@@ -16,20 +16,17 @@
 
 */
 /*eslint-disable*/
-import React from "react";
-import { NavLink, Link, useLocation } from "react-router-dom";
+import React from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 // nodejs library to set properties for components
-import { PropTypes } from "prop-types";
+import { PropTypes } from 'prop-types'
 
 // javascript plugin used to create scrollbars on windows
-import PerfectScrollbar from "perfect-scrollbar";
+import PerfectScrollbar from 'perfect-scrollbar'
 
 // reactstrap components
-import { Nav, NavLink as ReactstrapNavLink } from "reactstrap";
-import {
-  BackgroundColorContext,
-  backgroundColors,
-} from "contexts/BackgroundColorContext";
+import { Nav, NavLink as ReactstrapNavLink } from 'reactstrap'
+import { BackgroundColorContext } from 'contexts/BackgroundColorContext'
 
 var ps;
 
@@ -120,7 +117,7 @@ function Sidebar(props) {
             ) : null}
             <Nav>
               {routes.map((prop, key) => {
-                if (prop.redirect) return null;
+                if (prop.noNav) return null;
                 return (
                   <li
                     className={
@@ -129,7 +126,7 @@ function Sidebar(props) {
                     key={key}
                   >
                     <NavLink
-                      to={prop.layout + prop.path}
+                      to={prop.path}
                       className="nav-link"
                       activeClassName="active"
                       onClick={props.toggleSidebar}
