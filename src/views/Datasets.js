@@ -76,7 +76,7 @@ function Datasets () {
             </Card>
           </Col>
         </Row>
-        <Row className="datasets">
+        <Row className="all-datasets">
           {
             keys.map(k => datasetsMap[k]).
               map(({}) => (
