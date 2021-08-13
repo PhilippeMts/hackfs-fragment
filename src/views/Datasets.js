@@ -23,69 +23,75 @@ import {
   BreadcrumbItem,
   Button,
   Card,
-  CardBody, CardFooter, CardHeader, CardLink, CardText, CardTitle,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  CardLink,
+  CardText,
+  CardTitle,
   Col,
   Row,
 } from 'reactstrap'
 import { NavLink } from 'react-router-dom'
-import { transformationsStore } from '../utils/localStorage'
+import { datasetsStore } from '../utils/localStorage'
 
-function Transformations () {
+function Datasets () {
 
   const [keys, setKeys] = useState([])
-  const [transformationsMap, setTransformationsMap] = useState({})
-  const getTransformations = async () => {
+  const [datasetsMap, setDatasets] = useState({})
+  const getDatasets = async () => {
     let _keys = []
-    let _transformationsMap = {}
-    await transformationsStore.iterate((v, k) => {
-      _transformationsMap[k] = v
+    let _datasetsMap = {}
+    await datasetsStore.iterate((v, k) => {
+      _datasetsMap[k] = v
       _keys.push(k)
     })
-    setTransformationsMap(_transformationsMap)
+    setDatasets(_datasetsMap)
     setKeys(_keys)
   }
 
-  useEffect(getTransformations, [])
+  useEffect(getDatasets, [])
 
   return (
     <>
       <div className="content">
         <Breadcrumb>
-          <BreadcrumbItem active>Transformations</BreadcrumbItem>
+          <BreadcrumbItem active>Datasets</BreadcrumbItem>
         </Breadcrumb>
         <Row>
           <Col md="6">
             <Card>
               <CardBody>
                 <CardText>
-                  Push on IPFS the Wasm bytecode of all transformations
-                  you want to
-                  use to process datasets.
+                  Push initial datasets on IPFS and run multiple
+                  transformations,
+                  one after the other, creating collaborative data processing
+                  pipelines.
                 </CardText>
-                <NavLink to="/transformations/new">
-                  <Button color="primary" className={'text-center'}>Import
-                    new transformation</Button>
+                <NavLink to="/datasets/new">
+                  <Button color="primary" className={'text-center'}>Create
+                    new dataset</Button>
                 </NavLink>
               </CardBody>
             </Card>
           </Col>
         </Row>
-        <Row className="all-transformations">
+        <Row className="datasets">
           {
-            keys.map(k => transformationsMap[k]).
-              map(({ name, desc }) => (
+            keys.map(k => datasetsMap[k]).
+              map(({}) => (
                 <Col md="4">
                   <Card>
                     <CardBody>
                       <CardHeader>
-                        <CardTitle><h4>{name}</h4></CardTitle>
+                        <CardTitle><h4>{'todo'}</h4></CardTitle>
                       </CardHeader>
                       <CardBody>
-                        <CardText>{desc}</CardText>
+                        <CardText>{'todo'}</CardText>
                       </CardBody>
                       <CardFooter>
                         {/*TODO*/}
-                        <NavLink to={`/transformations/0`}>
+                        <NavLink to={`/datasets/0`}>
                           <CardLink>Card link TODO</CardLink>
                         </NavLink>
                       </CardFooter>
@@ -100,4 +106,4 @@ function Transformations () {
   )
 }
 
-export default Transformations
+export default Datasets

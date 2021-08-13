@@ -25,8 +25,16 @@ import Settings from "./views/Settings";
 import Transformations from './views/Transformations'
 import TransformationImport from './views/TransformationImport'
 import TransformationDetails from './views/TransformationDetails'
+import Datasets from './views/Datasets'
 
 var routes = [
+  {
+    path: "/datasets",
+    name: "Datasets",
+    icon: "tim-icons icon-bullet-list-67",
+    component: Datasets,
+    layout: "/admin",
+  },
   {
     path: "/transformations",
     name: "Transformations",

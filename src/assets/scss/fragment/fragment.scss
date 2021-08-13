@@ -48,10 +48,9 @@
 
 }
 
-.all-transformations {
+.all-transformations,
+.all-datasets {
   .card {
-    height: 256px;
-
     > .card-body {
       display: flex;
       height: 100%;
@@ -67,6 +66,18 @@
       }
 
     }
+  }
+}
+
+.all-transformations {
+  .card {
+    height: 256px;
+  }
+}
+
+.all-datasets {
+  .card {
+    height: 384px;
   }
 }
 
