@@ -18,6 +18,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
 
 import AdminLayout from "layouts/Admin/Admin.js";
 
@@ -28,17 +30,22 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import ThemeContextWrapper from "./components/ThemeWrapper/ThemeWrapper";
 import BackgroundColorWrapper from "./components/BackgroundColorWrapper/BackgroundColorWrapper";
+import { initFluence } from "./redux/fluence/action";
+
+initFluence();
 
 ReactDOM.render(
-  <ThemeContextWrapper>
-    <BackgroundColorWrapper>
-      <BrowserRouter>
-        <Switch>
-          <Route path="/" render={(props) => <AdminLayout {...props} />} />
-          <Redirect from="/" to="/datasets" />
-        </Switch>
-      </BrowserRouter>
-    </BackgroundColorWrapper>
-  </ThemeContextWrapper>,
+  <Provider store={store}>
+    <ThemeContextWrapper>
+      <BackgroundColorWrapper>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/" render={(props) => <AdminLayout {...props} />} />
+            <Redirect from="/" to="/datasets" />
+          </Switch>
+        </BrowserRouter>
+      </BackgroundColorWrapper>
+    </ThemeContextWrapper>
+  </Provider>,
   document.getElementById("root")
 );
