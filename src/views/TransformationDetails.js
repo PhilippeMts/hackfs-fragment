@@ -70,7 +70,7 @@ function TransformationDetails () {
           <NotificationAlert ref={notificationAlertRef}/>
         </div>
         <Breadcrumb>
-          <BreadcrumbItem active>
+          <BreadcrumbItem>
             <NavLink to="/transformations">
               Transformations
             </NavLink>
