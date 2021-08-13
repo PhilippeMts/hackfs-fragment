@@ -23,55 +23,70 @@ import {
   BreadcrumbItem,
   Button,
   Card,
-  CardBody, Col, Form, FormGroup, FormText, Input, Label,
+  CardBody,
+  Col,
+  Form,
+  FormGroup,
+  FormText,
+  Input,
+  Label,
   Row,
 } from 'reactstrap'
 import { NavLink, useHistory } from 'react-router-dom'
-import { transformationsStore } from '../utils/localStorage'
+import { datasetsStore } from '../utils/localStorage'
+import { ThemeContext, themes } from '../contexts/ThemeContext'
+import SyntaxHighlighter from 'react-syntax-highlighter'
+import {
+  atomOneDark,
+  atomOneLight,
+} from 'react-syntax-highlighter/dist/esm/styles/hljs'
 
-function TransformationImport () {
-  const history = useHistory();
+function DatasetCreation () {
+  const history = useHistory()
   const [file, setFile] = useState(null)
   const [name, setName] = useState('')
-  const [desc, setDesc] = useState('')
+  const [jsonString, setJsonString] = useState('{}')
   const [isPending, setIsPending] = useState(false)
 
   const onChangeFile = e => {
-    setFile(e.target.files[0])
+    const file = e.target.files[0]
+    setFile(file)
+    if (file) {
+      const reader = new FileReader()
+      reader.readAsText(file, 'UTF-8')
+      reader.onload = evt => {
+        setJsonString(evt.target.result)
+      }
+    }
+
   }
 
   const onChangeName = e => {
     setName(e.target.value)
   }
 
-  const onChangeDesc = e => {
-    setDesc(e.target.value)
-  }
-
   const onSubmit = async e => {
-    e.preventDefault();
-    setIsPending(true);
-    let unsecureKey = (await transformationsStore.length()).toString();  // TODO replace w/ IPLD object CID
-    await transformationsStore.setItem(
+    e.preventDefault()
+    setIsPending(true)
+    let unsecureKey = (await datasetsStore.length()).toString()  // TODO replace w/ IPLD object CID
+    await datasetsStore.setItem(
       unsecureKey,
       {
-        file,
+        jsonString,
         name,
-        desc
-      }
-    );
-    history.push("/transformations");
+      },
+    )
+    history.push('/datasets')
     // TODO probably notification
   }
 
-
   return (
     <>
-      <div className="content">
+      <div className="content dataset-creation">
         <Breadcrumb>
           <BreadcrumbItem>
-            <NavLink to="/transformations">
-              Transformations
+            <NavLink to="/datasets">
+              Datasets
             </NavLink>
           </BreadcrumbItem>
           <BreadcrumbItem active>New</BreadcrumbItem>
@@ -84,8 +99,9 @@ function TransformationImport () {
                   <Row>
                     <Col md="4">
                       <FormGroup>
-                        <Label for="wasmFile">Wasm module</Label>
-                        <Input type="file" accept=".wasm" name="file" id="wasmFile"
+                        <Label for="jsonFile">Initial JSON data</Label>
+                        <Input type="file" accept=".json" name="jsonFile"
+                               id="jsonFile"
                                onChange={onChangeFile}/>
                         {file ?
                           <FormText color="muted">
@@ -99,31 +115,41 @@ function TransformationImport () {
                       </FormGroup>
                     </Col>
                     <Col md="8">
-                      <FormGroup className={name ? '' : "has-danger"}>
+                      <FormGroup className={name ? '' : 'has-danger'}>
                         <Label for="name">Name</Label>
                         <Input
                           id="name"
                           value={name}
                           onChange={onChangeName}
-                          placeholder="What would be a good name for this module ?"
+                          placeholder="What would be a good name for this dataset ?"
                           type="text"
                         />
                       </FormGroup>
                     </Col>
                   </Row>
-                  <FormGroup>
-                    <Label for="description">Description</Label>
-                    <Input
-                      id="description"
-                      value={desc}
-                      onChange={onChangeDesc}
-                      cols="80"
-                      placeholder="Take some time to describe the way your module works."
-                      rows="4"
-                      type="textarea"
-                    />
-                  </FormGroup>
-                  <Button color="primary" type="submit" disabled={isPending || !file || !name}>
+                  <Row>
+                    <Col md="12">
+                      <FormGroup>
+                        <Label for="jsonPreview">Preview</Label>
+                        <div id="jsonPreview" className="jsonPreview">
+                          {jsonString ?
+                            <ThemeContext.Consumer>
+                              {({ theme }) => (
+                                <SyntaxHighlighter language="json"
+                                                   style={theme === themes.dark
+                                                     ? atomOneDark
+                                                     : atomOneLight}>
+                                  {jsonString}
+                                </SyntaxHighlighter>
+                              )}
+                            </ThemeContext.Consumer>
+                            : null}
+                        </div>
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Button color="primary" type="submit"
+                          disabled={isPending || !file || !name}>
                     Import
                   </Button>
                 </Form>
@@ -136,4 +162,4 @@ function TransformationImport () {
   )
 }
 
-export default TransformationImport
+export default DatasetCreation

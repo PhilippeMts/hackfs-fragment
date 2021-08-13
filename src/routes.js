@@ -26,6 +26,7 @@ import Transformations from './views/Transformations'
 import TransformationImport from './views/TransformationImport'
 import TransformationDetails from './views/TransformationDetails'
 import Datasets from './views/Datasets'
+import DatasetCreation from './views/DatasetCreation'
 
 var routes = [
   {
@@ -34,6 +35,14 @@ var routes = [
     icon: "tim-icons icon-bullet-list-67",
     component: Datasets,
     layout: "/admin",
+  },
+  {
+    path: "/datasets/new",
+    name: "Create new dataset",
+    icon: "tim-icons icon-cloud-upload-94",
+    component: DatasetCreation,
+    layout: "/admin",
+    noNav: true,
   },
   {
     path: "/transformations",
