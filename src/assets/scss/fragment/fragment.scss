@@ -1,3 +1,7 @@
+.has-danger.form-group::after {
+  display: none;
+}
+
 .settings {
   .color-label {
     position: relative;
