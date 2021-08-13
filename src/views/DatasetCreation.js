@@ -34,12 +34,7 @@ import {
 } from 'reactstrap'
 import { NavLink, useHistory } from 'react-router-dom'
 import { datasetsStore } from '../utils/localStorage'
-import { ThemeContext, themes } from '../contexts/ThemeContext'
-import SyntaxHighlighter from 'react-syntax-highlighter'
-import {
-  atomOneDark,
-  atomOneLight,
-} from 'react-syntax-highlighter/dist/esm/styles/hljs'
+import JsonPreview from '../components/JsonPreview/JsonPreview'
 
 function DatasetCreation () {
   const history = useHistory()
@@ -131,20 +126,7 @@ function DatasetCreation () {
                     <Col md="12">
                       <FormGroup>
                         <Label for="jsonPreview">Preview</Label>
-                        <div id="jsonPreview" className="jsonPreview">
-                          {jsonString ?
-                            <ThemeContext.Consumer>
-                              {({ theme }) => (
-                                <SyntaxHighlighter language="json"
-                                                   style={theme === themes.dark
-                                                     ? atomOneDark
-                                                     : atomOneLight}>
-                                  {jsonString}
-                                </SyntaxHighlighter>
-                              )}
-                            </ThemeContext.Consumer>
-                            : null}
-                        </div>
+                        <JsonPreview jsonString={jsonString}/>
                       </FormGroup>
                     </Col>
                   </Row>

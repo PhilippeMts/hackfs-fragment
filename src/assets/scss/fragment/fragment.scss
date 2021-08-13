@@ -94,21 +94,29 @@
   }
 }
 
+.jsonPreview {
+  border: 1px solid #e44cc4;
+  border-radius: .1875rem;
+
+  position: relative;
+
+  pre {
+    margin-bottom: 0;
+
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+}
+
 .dataset-creation {
   .jsonPreview {
     height: 256px;
-    border: 1px solid #e44cc4;
-    border-radius: .1875rem;
-
-    position: relative;
-
-    pre {
-      margin-bottom: 0;
-
-      position: absolute;
-      width: 100%;
-      height: 100%;
-    }
   }
+}
 
+.all-datasets {
+  .jsonPreview {
+    height: 100%;
+  }
 }
