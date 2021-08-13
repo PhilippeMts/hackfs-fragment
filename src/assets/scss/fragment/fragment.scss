@@ -48,14 +48,33 @@
 
 }
 
-.all-transformations-item {
-  > div {
+.all-transformations {
+  .card {
     height: 256px;
 
-    .card-body > div {
-      height: 182px;
-      margin-bottom: 24px;
-      overflow: hidden;
+    > .card-body {
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+
+      .card-header,
+      .card-body {
+        overflow: hidden;
+      }
+
+      .card-body {
+        flex: 1;
+      }
+
+    }
+  }
+}
+
+.transformation-details {
+  tr {
+    td:first-child {
+      width: 160px;
+      word-wrap: break-word;
     }
   }
 }

@@ -23,7 +23,7 @@ import {
   BreadcrumbItem,
   Button,
   Card,
-  CardBody, CardLink, CardText, CardTitle,
+  CardBody, CardFooter, CardHeader, CardLink, CardText, CardTitle,
   Col,
   Row,
 } from 'reactstrap'
@@ -70,20 +70,25 @@ function Transformations () {
             </Card>
           </Col>
         </Row>
-        <Row>
+        <Row className="all-transformations">
           {
             keys.map(k => transformationsMap[k]).
               map(({ name, desc }) => (
-                <Col md="4" className="all-transformations-item">
+                <Col md="4">
                   <Card>
                     <CardBody>
-                      <div>
-                        <CardTitle>{name}</CardTitle>
+                      <CardHeader>
+                        <CardTitle><h4>{name}</h4></CardTitle>
+                      </CardHeader>
+                      <CardBody>
                         <CardText>{desc}</CardText>
-                      </div>
-                      <NavLink to="/transformations/todo">
-                        <CardLink>Card link</CardLink>
-                      </NavLink>
+                      </CardBody>
+                      <CardFooter>
+                        {/*TODO*/}
+                        <NavLink to={`/transformations/0`}>
+                          <CardLink>Card link</CardLink>
+                        </NavLink>
+                      </CardFooter>
                     </CardBody>
                   </Card>
                 </Col>
