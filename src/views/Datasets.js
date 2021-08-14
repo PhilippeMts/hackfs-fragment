@@ -69,7 +69,7 @@ function Datasets () {
         <Row className="all-datasets">
           {
            datasetsMap?.
-              map(({jsonString, name}) => (
+              map(({jsonString, name, cid}) => (
                 <Col md="4">
                   <Card>
                     <CardBody>
@@ -81,8 +81,8 @@ function Datasets () {
                       </CardBody>
                       <CardFooter>
                         {/*TODO*/}
-                        <NavLink to={`/datasets/0`}>
-                          <CardLink>Card link TODO</CardLink>
+                        <NavLink to={`/datasets/${cid}`}>
+                          <CardLink>View</CardLink>
                         </NavLink>
                       </CardFooter>
                     </CardBody>

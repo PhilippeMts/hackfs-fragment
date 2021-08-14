@@ -36,23 +36,20 @@ import { NavLink, useParams } from 'react-router-dom'
 import { datasetsStore } from '../utils/localStorage'
 import NotificationAlert from 'react-notification-alert'
 import copy from 'copy-to-clipboard'
+import { useSelector } from "react-redux";
 
 function DatasetDetails () {
   const notificationAlertRef = React.useRef(null)
 
   let { id } = useParams()
-  const [dataset, setDataset] = useState({})
-  const getDataset = async () => {
-    setDataset(await datasetsStore.getItem(id))
-  }
-  useEffect(getDataset, [])
+  const dataset = useSelector(state => state.dataset.objects[id]);
 
   const [isOpen, setIsOpen] = useState(false)
 
   const toggle = () => setIsOpen(!isOpen)
 
   const onIdShareClick = () => {
-    copy('TODO')
+    copy(`https://localhost:3000/datasets/${id}`)
     const options = {
       place: 'tr',
       message: (
@@ -88,7 +85,7 @@ function DatasetDetails () {
             <Card>
               <CardHeader>
                 <CardTitle>
-                  <h4>{dataset.name}</h4>
+                  <h4>{dataset?.name}</h4>
                 </CardTitle>
               </CardHeader>
               <CardBody>
@@ -98,10 +95,11 @@ function DatasetDetails () {
                     <td>ID</td>
                     <td>
                       <p>
-                        <code>TODO</code>
+                        <code>{id}</code>
+                        TODO LINK
                         <Button className="btn-link ml-2"
                                 color="primary"
-                                href="https://ipfs.io/TODO" target="_blank"
+                                href={`https://ipfs.io/ipfs/${id}`} target="_blank"
                                 rel="noopener noreferrer"
                         >
                           See on IPFS
