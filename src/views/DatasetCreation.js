@@ -35,9 +35,12 @@ import {
 import { NavLink, useHistory } from 'react-router-dom'
 import { datasetsStore } from '../utils/localStorage'
 import JsonPreview from '../components/JsonPreview/JsonPreview'
+import { useDispatch } from "react-redux";
+import { postDataSet } from "../redux/dataset/action";
 
 function DatasetCreation () {
   const history = useHistory()
+  const dispatch = useDispatch();
   const [file, setFile] = useState(null)
   const [name, setName] = useState('')
   const [jsonString, setJsonString] = useState('{}')
@@ -63,14 +66,7 @@ function DatasetCreation () {
   const onSubmit = async e => {
     e.preventDefault()
     setIsPending(true)
-    let unsecureKey = (await datasetsStore.length()).toString()  // TODO replace w/ IPLD object CID
-    await datasetsStore.setItem(
-      unsecureKey,
-      {
-        jsonString,
-        name,
-      },
-    )
+    dispatch(postDataSet(name, jsonString));
     history.push('/datasets')
     // TODO probably notification
   }

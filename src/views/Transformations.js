@@ -29,23 +29,11 @@ import {
 } from 'reactstrap'
 import { NavLink } from 'react-router-dom'
 import { transformationsStore } from '../utils/localStorage'
+import { useSelector } from "react-redux";
 
 function Transformations () {
 
-  const [keys, setKeys] = useState([])
-  const [transformationsMap, setTransformationsMap] = useState({})
-  const getTransformations = async () => {
-    let _keys = []
-    let _transformationsMap = {}
-    await transformationsStore.iterate((v, k) => {
-      _transformationsMap[k] = v
-      _keys.push(k)
-    })
-    setTransformationsMap(_transformationsMap)
-    setKeys(_keys)
-  }
-
-  useEffect(getTransformations, [])
+  const transformationsMap = useSelector(state => Object.values(state.transformation.objects));
 
   return (
     <>
@@ -72,7 +60,7 @@ function Transformations () {
         </Row>
         <Row className="all-transformations">
           {
-            keys.map(k => transformationsMap[k]).
+            transformationsMap?.
               map(({ name, desc }) => (
                 <Col md="4">
                   <Card>

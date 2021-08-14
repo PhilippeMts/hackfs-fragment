@@ -2,15 +2,26 @@ import { deploy_service } from "../../utils/process";
 import { Particle, sendParticle, subscribeToEvent } from "@fluencelabs/fluence";
 import { transformationsStore } from "../../utils/localStorage";
 
-export const POST_TRANSFORMATION = "POST_TRANSFORMATION";
+export const INIT_TRANSFORMATIONS = "INIT_TRANSFORMATIONS";
+export const SET_TRANSFORMATION = "SET_TRANSFORMATION";
 export const TRANSFORMATION_RUN = "TRANSFORMATION_RUN";
 
+export const initTransformations = () => async (dispatch, getState) => {
+  const transformationKeys = await transformationsStore.keys();
+
+  let objects = {};
+  transformationKeys.forEach(k => transformationsStore.getItem(k, (err, value) => {
+    // TODO Handle err
+    objects[k] = { ...value, cid: k };
+  }))
+
+  dispatch({ type: INIT_TRANSFORMATIONS, payload: { objects }});
+}
 
 export const postTransformation = (transformationName, transformationDescription, transformationFile) => async (dispatch, getState) => {
-    const ipfs = getState().ipfs.ipfs;
+  const ipfs = getState().ipfs.ipfs;
 
-
-    const file = await ipfs.add(transformationFile);
+  const file = await ipfs.add(transformationFile);
 
     // Add to local storage
     await transformationsStore.setItem(
@@ -23,11 +34,11 @@ export const postTransformation = (transformationName, transformationDescription
     );
 
 
-    dispatch({ type: POST_TRANSFORMATION, payload: {name: transformationName, desc: transformationDescription, file: transformationFile, cid: file.cid.toString()}});
+    dispatch({ type: SET_TRANSFORMATION, payload: {name: transformationName, desc: transformationDescription, file: transformationFile, cid: file.cid.toString()}});
 }
 
 export const runTransformation = (transformationCID, functionName) => async (dispatch, getState) => {
-    const { ipfs, rpcAddress } = getState().ipfs;
+    const { rpcAddress } = getState().ipfs;
     const { client, environment } = getState().fluence
 
     let serviceId = await deploy_service(
