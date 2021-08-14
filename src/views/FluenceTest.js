@@ -15,20 +15,15 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 // reactstrap components
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  Button,
-  Row,
-} from 'reactstrap'
-import { useDispatch, useSelector } from "react-redux";
+import { Button, Row } from 'reactstrap'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   postTransformation,
-  runTransformation
-} from "../redux/transformation/action";
+  runTransformation,
+} from '../redux/transformation/action'
 
 function FluenceTest () {
   const transformations = useSelector(state => {
@@ -43,9 +38,6 @@ function FluenceTest () {
   return (
     <>
       <div className="content">
-        <Breadcrumb>
-          <BreadcrumbItem active>Datasets</BreadcrumbItem>
-        </Breadcrumb>
         <Row>
           <input type="file"
                  onChange={(e) => setSelectedFile(e.target.files[0])}/>
