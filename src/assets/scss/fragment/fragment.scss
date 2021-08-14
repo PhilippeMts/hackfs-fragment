@@ -1,3 +1,7 @@
+.has-danger.form-group::after {
+  display: none;
+}
+
 .settings {
   .color-label {
     position: relative;
@@ -48,10 +52,9 @@
 
 }
 
-.all-transformations {
+.all-transformations,
+.all-datasets {
   .card {
-    height: 256px;
-
     > .card-body {
       display: flex;
       height: 100%;
@@ -70,11 +73,60 @@
   }
 }
 
+.all-transformations {
+  .card {
+    height: 256px;
+  }
+}
+
+.all-datasets {
+  .card {
+    height: 384px;
+  }
+}
+
 .transformation-details {
   tr {
     td:first-child {
       width: 160px;
       word-wrap: break-word;
+    }
+  }
+}
+
+.jsonPreview {
+  border: 1px solid #e44cc4;
+  border-radius: .1875rem;
+
+  position: relative;
+
+  pre {
+    margin-bottom: 0;
+
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.dataset-creation {
+  .jsonPreview {
+    height: 256px;
+  }
+}
+
+.all-datasets {
+  .jsonPreview {
+    height: 100%;
+  }
+}
+
+.dataset-details-content {
+  .history {
+    .accordion-toggle-button {
+      margin: 0;
+      padding-top: 0;
+      padding-bottom: 0;
     }
   }
 }

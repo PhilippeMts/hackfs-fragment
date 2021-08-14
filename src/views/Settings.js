@@ -35,6 +35,7 @@ function Settings () {
     await transformationsStore.clear();
     await datasetsStore.clear();
     console.log("local forage has been cleared !")
+    // TODO notification
   }
 
   return (

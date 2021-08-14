@@ -24,18 +24,19 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
+  CardHeader, CardLink,
+  CardText,
   CardTitle,
   Col,
+  Collapse,
   Row,
-  Table,
 } from 'reactstrap'
 import { NavLink, useParams } from 'react-router-dom'
 import { transformationsStore } from '../utils/localStorage'
 import NotificationAlert from 'react-notification-alert'
 import copy from 'copy-to-clipboard'
 
-function TransformationDetails () {
+function DatasetDetails () {
   const notificationAlertRef = React.useRef(null)
 
   let { id } = useParams()
@@ -45,19 +46,23 @@ function TransformationDetails () {
   }
   useEffect(getTransformation, [])
 
-  const onIdCopyClick = () => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const toggle = () => setIsOpen(!isOpen)
+
+  const onIdShareClick = () => {
     copy('TODO')
     const options = {
       place: 'tr',
       message: (
         <div>
           <div>
-            Transformation ID copied to clipboard!
+            Sharing link copied to clipboard!
           </div>
         </div>
       ),
       type: 'success',
-      icon: 'tim-icons icon-single-copy-04',
+      icon: 'tim-icons icon-send',
       autoDismiss: 7,
     }
     notificationAlertRef.current.notificationAlert(options)
@@ -65,14 +70,14 @@ function TransformationDetails () {
 
   return (
     <>
-      <div className="content">
+      <div className="content dataset-details-content">
         <div className="react-notification-alert-container">
           <NotificationAlert ref={notificationAlertRef}/>
         </div>
         <Breadcrumb>
           <BreadcrumbItem>
-            <NavLink to="/transformations">
-              Transformations
+            <NavLink to="/datasets">
+              Datasets
             </NavLink>
           </BreadcrumbItem>
           <BreadcrumbItem active>Details</BreadcrumbItem>
@@ -86,7 +91,7 @@ function TransformationDetails () {
                 </CardTitle>
               </CardHeader>
               <CardBody>
-                <Table className="transformation-details" responsive>
+                <div className="transformation-details">
                   <tbody>
                   <tr>
                     <td>ID</td>
@@ -101,39 +106,68 @@ function TransformationDetails () {
                           See on IPFS
                         </Button>
                         <Button className="btn-simple ml-4" color="primary"
-                                onClick={onIdCopyClick}>
+                                onClick={onIdShareClick}>
                           {/*TODO*/}
-                          <i className="tim-icons icon-single-copy-04"/>{' '}
-                          Copy
+                          <i className="tim-icons icon-send"/>{' '}
+                          Share
                         </Button>
                       </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Wasm module</td>
-                    <td>
-                      <p>
-                        <code>TODO</code>
-                        <Button className="btn-link ml-2"
-                                color="primary"
-                                href="https://ipfs.io/TODO" target="_blank"
-                                rel="noopener noreferrer"
-                        >
-                          See on IPFS
-                        </Button>
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Description</td>
-                    <td>
-                      <p>{transformation.desc}</p>
                     </td>
                   </tr>
                   </tbody>
-                </Table>
+                </div>
+                <CardText className={'mt-4'}>
+                  Collaborate and push a new evolution of this dataset by
+                  executing a new transformation.
+                </CardText>
+                <NavLink to={`/datasets/${id}/process`}>
+                  <Button color="primary" className={'text-center'}>Run new
+                    transformation</Button>
+                </NavLink>
               </CardBody>
             </Card>
+          </Col>
+        </Row>
+        <Row className={'history'}>
+          <Col lg="12">
+            <>
+              {/*TODO WIP to iterate on dataset history items*/}
+              <Card onClick={toggle}>
+                <CardHeader>
+                  <CardTitle>
+                    <Row>
+                      <Col lg="10">
+                        <h6>
+                        {'Transformation name TODO'}{' '}
+                        {'TODO difference between initial data and processed data (with transformation name)'}
+                        </h6>
+                        <NavLink className={'ml-4'} to={`/transformations/0`}>
+                          <CardLink>see more TODO</CardLink>
+                        </NavLink>
+                      </Col>
+                      <Col lg="2" className="text-right">
+                        <Button className="btn-link accordion-toggle-button"
+                                color="primary" size="sm">
+                          <i className="tim-icons icon-minimal-down"
+                             color="primary"/>{' '}
+                        </Button>
+                      </Col>
+                    </Row>
+                  </CardTitle>
+                </CardHeader>
+                <Collapse isOpen={isOpen}>
+                  <CardBody>
+                    {'TODO difference between initial data (not tag) and processed data (tag `output data`)'}
+                    Anim pariatur cliche reprehenderit,
+                    enim eiusmod high life accusamus terry richardson ad squid.
+                    Nihil
+                    anim keffiyeh helvetica, craft beer labore wes anderson cred
+                    nesciunt sapiente ea proident.
+                  </CardBody>
+                </Collapse>
+
+              </Card>
+            </>
           </Col>
         </Row>
       </div>
@@ -141,4 +175,4 @@ function TransformationDetails () {
   )
 }
 
-export default TransformationDetails
+export default DatasetDetails

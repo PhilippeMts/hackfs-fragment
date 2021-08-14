@@ -25,8 +25,34 @@ import Settings from "./views/Settings";
 import Transformations from './views/Transformations'
 import TransformationImport from './views/TransformationImport'
 import TransformationDetails from './views/TransformationDetails'
+import Datasets from './views/Datasets'
+import DatasetCreation from './views/DatasetCreation'
+import DatasetDetails from './views/DatasetDetails'
 
 var routes = [
+  {
+    path: "/datasets",
+    name: "Datasets",
+    icon: "tim-icons icon-bullet-list-67",
+    component: Datasets,
+    layout: "/admin",
+  },
+  {
+    path: "/datasets/new",
+    name: "Create new dataset",
+    icon: "tim-icons icon-cloud-upload-94",
+    component: DatasetCreation,
+    layout: "/admin",
+    noNav: true,
+  },
+  {
+    path: "/datasets/:id",
+    name: "Dataset details",
+    icon: "tim-icons icon-paper",
+    component: DatasetDetails,
+    layout: "/admin",
+    noNav: true,
+  },
   {
     path: "/transformations",
     name: "Transformations",
