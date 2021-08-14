@@ -24,7 +24,8 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader, CardLink,
+  CardHeader,
+  CardLink,
   CardText,
   CardTitle,
   Col,
@@ -32,7 +33,7 @@ import {
   Row,
 } from 'reactstrap'
 import { NavLink, useParams } from 'react-router-dom'
-import { transformationsStore } from '../utils/localStorage'
+import { datasetsStore } from '../utils/localStorage'
 import NotificationAlert from 'react-notification-alert'
 import copy from 'copy-to-clipboard'
 
@@ -40,11 +41,11 @@ function DatasetDetails () {
   const notificationAlertRef = React.useRef(null)
 
   let { id } = useParams()
-  const [transformation, setTransformation] = useState({})
-  const getTransformation = async () => {
-    setTransformation(await transformationsStore.getItem(id))
+  const [dataset, setDataset] = useState({})
+  const getDataset = async () => {
+    setDataset(await datasetsStore.getItem(id))
   }
-  useEffect(getTransformation, [])
+  useEffect(getDataset, [])
 
   const [isOpen, setIsOpen] = useState(false)
 
@@ -87,7 +88,7 @@ function DatasetDetails () {
             <Card>
               <CardHeader>
                 <CardTitle>
-                  <h4>{transformation.name}</h4>
+                  <h4>{dataset.name}</h4>
                 </CardTitle>
               </CardHeader>
               <CardBody>

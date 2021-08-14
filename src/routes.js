@@ -29,6 +29,7 @@ import Datasets from './views/Datasets'
 import DatasetCreation from './views/DatasetCreation'
 import DatasetDetails from './views/DatasetDetails'
 import FluenceTest from "./views/FluenceTest";
+import DatasetProcess from './views/DatasetProcess'
 
 var routes = [
   {
@@ -51,6 +52,14 @@ var routes = [
     name: "Dataset details",
     icon: "tim-icons icon-paper",
     component: DatasetDetails,
+    layout: "/admin",
+    noNav: true,
+  },
+  {
+    path: "/datasets/:id/process",
+    name: "Run new transformation",
+    icon: "tim-icons icon-spaceship",
+    component: DatasetProcess,
     layout: "/admin",
     noNav: true,
   },
