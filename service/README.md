@@ -1,6 +1,6 @@
 # Service
 
-Service is where the Fluence Rust module used for the demo is located. 
+Service is where the Fluence Rust module used for the demo is located.
 
 ## Architecture 
 
@@ -17,6 +17,10 @@ In `./artifacts` are located the basic dataset usable for the current module and
 pre-built for the demo module.
 
 ## Build
+
+**Dependencies**
+The marine CLI (install guidelines can be found [here](https://doc.fluence.dev/docs/tutorials_tutorials/recipes_setting_up))
+should be installed on your machine.
 
 To build a new module you can use the `build.sh` script. It leverages the marine CLI and copies 
 generated artifacts to the `./artifacts` folder.
