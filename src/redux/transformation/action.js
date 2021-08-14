@@ -1,18 +1,29 @@
 import { deploy_service } from "../../utils/process";
 import { Particle, sendParticle, subscribeToEvent } from "@fluencelabs/fluence";
+import { transformationsStore } from "../../utils/localStorage";
 
 export const POST_TRANSFORMATION = "POST_TRANSFORMATION";
 export const TRANSFORMATION_RUN = "TRANSFORMATION_RUN";
 
 
-export const postTransformation = (transformationName, transformationFile) => async (dispatch, getState) => {
+export const postTransformation = (transformationName, transformationDescription, transformationFile) => async (dispatch, getState) => {
     const ipfs = getState().ipfs.ipfs;
 
 
     const file = await ipfs.add(transformationFile);
 
+    // Add to local storage
+    await transformationsStore.setItem(
+      file.cid.toString(),
+      {
+        file: transformationFile,
+        name: transformationName,
+        desc: transformationDescription
+      }
+    );
 
-    dispatch({ type: POST_TRANSFORMATION, payload: {name: transformationName, cid: file.cid.toString()}});
+
+    dispatch({ type: POST_TRANSFORMATION, payload: {name: transformationName, desc: transformationDescription, file: transformationFile, cid: file.cid.toString()}});
 }
 
 export const runTransformation = (transformationCID, functionName) => async (dispatch, getState) => {

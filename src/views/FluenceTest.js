@@ -56,7 +56,7 @@ function FluenceTest () {
         </Row>
         <Row>
           <Button onClick={() => {
-            dispatch(postTransformation(fileName, selectedFile));
+            dispatch(postTransformation(fileName, fileName, selectedFile));
           }}>UPLOAD</Button>
         </Row>
         {

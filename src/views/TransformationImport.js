@@ -28,9 +28,13 @@ import {
 } from 'reactstrap'
 import { NavLink, useHistory } from 'react-router-dom'
 import { transformationsStore } from '../utils/localStorage'
+import { useDispatch } from "react-redux";
+import { postTransformation } from "../redux/transformation/action";
 
 function TransformationImport () {
   const history = useHistory();
+  const dispatch = useDispatch();
+
   const [file, setFile] = useState(null)
   const [name, setName] = useState('')
   const [desc, setDesc] = useState('')
@@ -51,15 +55,7 @@ function TransformationImport () {
   const onSubmit = async e => {
     e.preventDefault();
     setIsPending(true);
-    let unsecureKey = (await transformationsStore.length()).toString();  // TODO replace w/ IPLD object CID
-    await transformationsStore.setItem(
-      unsecureKey,
-      {
-        file,
-        name,
-        desc
-      }
-    );
+    dispatch(postTransformation(name, desc, file));
     history.push("/transformations");
     // TODO probably notification
   }
