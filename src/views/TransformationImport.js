@@ -37,6 +37,7 @@ function TransformationImport () {
 
   const [file, setFile] = useState(null)
   const [name, setName] = useState('')
+  const [nbrInputs, setNbrInputs] = useState('')
   const [desc, setDesc] = useState('')
   const [isPending, setIsPending] = useState(false)
 
@@ -48,6 +49,10 @@ function TransformationImport () {
     setName(e.target.value)
   }
 
+  const onChangeNbrInputs = e => {
+    setNbrInputs(e.target.value)
+  }
+
   const onChangeDesc = e => {
     setDesc(e.target.value)
   }
@@ -55,7 +60,7 @@ function TransformationImport () {
   const onSubmit = async e => {
     e.preventDefault();
     setIsPending(true);
-    dispatch(postTransformation(name, desc, file));
+    dispatch(postTransformation(name, desc, nbrInputs, file));
     history.push("/transformations");
     // TODO probably notification
   }
@@ -94,7 +99,7 @@ function TransformationImport () {
                         }
                       </FormGroup>
                     </Col>
-                    <Col md="8">
+                    <Col md="5">
                       <FormGroup className={name ? '' : "has-danger"}>
                         <Label for="name">Name</Label>
                         <Input
@@ -103,6 +108,18 @@ function TransformationImport () {
                           onChange={onChangeName}
                           placeholder="What would be a good name for this module ?"
                           type="text"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="3">
+                      <FormGroup className={nbrInputs ? '' : "has-danger"}>
+                        <Label for="name">Number of parameters in the module</Label>
+                        <Input
+                          id="name"
+                          value={nbrInputs}
+                          onChange={onChangeNbrInputs}
+                          placeholder="Number of parameters"
+                          type="number"
                         />
                       </FormGroup>
                     </Col>

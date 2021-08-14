@@ -18,7 +18,7 @@ export const initTransformations = () => async (dispatch, getState) => {
   dispatch({ type: INIT_TRANSFORMATIONS, payload: { objects }});
 }
 
-export const postTransformation = (transformationName, transformationDescription, transformationFile) => async (dispatch, getState) => {
+export const postTransformation = (transformationName, transformationDescription, transformationNbrInputs, transformationFile) => async (dispatch, getState) => {
   const ipfs = getState().ipfs.ipfs;
 
   const file = await ipfs.add(transformationFile);
@@ -29,12 +29,13 @@ export const postTransformation = (transformationName, transformationDescription
       {
         file: transformationFile,
         name: transformationName,
-        desc: transformationDescription
+        desc: transformationDescription,
+        nbrInputs: transformationNbrInputs
       }
     );
 
 
-    dispatch({ type: SET_TRANSFORMATION, payload: {name: transformationName, desc: transformationDescription, file: transformationFile, cid: file.cid.toString()}});
+    dispatch({ type: SET_TRANSFORMATION, payload: {name: transformationName, desc: transformationDescription, file: transformationFile, cid: file.cid.toString(), nbrInputs: transformationNbrInputs }});
 }
 
 export const runTransformation = (transformationCID, functionName) => async (dispatch, getState) => {
