@@ -35,23 +35,12 @@ import {
 import { NavLink } from 'react-router-dom'
 import { datasetsStore } from '../utils/localStorage'
 import JsonPreview from '../components/JsonPreview/JsonPreview'
+import { useSelector } from "react-redux";
 
 function Datasets () {
 
-  const [keys, setKeys] = useState([])
-  const [datasetsMap, setDatasets] = useState({})
-  const getDatasets = async () => {
-    let _keys = []
-    let _datasetsMap = {}
-    await datasetsStore.iterate((v, k) => {
-      _datasetsMap[k] = v
-      _keys.push(k)
-    })
-    setDatasets(_datasetsMap)
-    setKeys(_keys)
-  }
+  const datasetsMap = useSelector(state => Object.values(state.dataset.objects));
 
-  useEffect(getDatasets, [])
 
   return (
     <>
@@ -79,7 +68,7 @@ function Datasets () {
         </Row>
         <Row className="all-datasets">
           {
-            keys.map(k => datasetsMap[k]).
+           datasetsMap?.
               map(({jsonString, name}) => (
                 <Col md="4">
                   <Card>

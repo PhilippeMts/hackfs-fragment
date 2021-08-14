@@ -28,6 +28,7 @@ import TransformationDetails from './views/TransformationDetails'
 import Datasets from './views/Datasets'
 import DatasetCreation from './views/DatasetCreation'
 import DatasetDetails from './views/DatasetDetails'
+import FluenceTest from "./views/FluenceTest";
 
 var routes = [
   {
@@ -81,6 +82,13 @@ var routes = [
     name: "Settings",
     icon: "tim-icons icon-settings",
     component: Settings,
+    layout: "/admin",
+  },
+  {
+    path: "/fluence",
+    name: "Fluence",
+    icon: "tim-icons icon-bullet-list-67",
+    component: FluenceTest,
     layout: "/admin",
   },
   {

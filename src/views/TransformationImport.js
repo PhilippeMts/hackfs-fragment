@@ -28,11 +28,16 @@ import {
 } from 'reactstrap'
 import { NavLink, useHistory } from 'react-router-dom'
 import { transformationsStore } from '../utils/localStorage'
+import { useDispatch } from "react-redux";
+import { postTransformation } from "../redux/transformation/action";
 
 function TransformationImport () {
   const history = useHistory();
+  const dispatch = useDispatch();
+
   const [file, setFile] = useState(null)
   const [name, setName] = useState('')
+  const [nbrInputs, setNbrInputs] = useState('')
   const [desc, setDesc] = useState('')
   const [isPending, setIsPending] = useState(false)
 
@@ -44,6 +49,10 @@ function TransformationImport () {
     setName(e.target.value)
   }
 
+  const onChangeNbrInputs = e => {
+    setNbrInputs(e.target.value)
+  }
+
   const onChangeDesc = e => {
     setDesc(e.target.value)
   }
@@ -51,15 +60,7 @@ function TransformationImport () {
   const onSubmit = async e => {
     e.preventDefault();
     setIsPending(true);
-    let unsecureKey = (await transformationsStore.length()).toString();  // TODO replace w/ IPLD object CID
-    await transformationsStore.setItem(
-      unsecureKey,
-      {
-        file,
-        name,
-        desc
-      }
-    );
+    dispatch(postTransformation(name, desc, nbrInputs, file));
     history.push("/transformations");
     // TODO probably notification
   }
@@ -98,7 +99,7 @@ function TransformationImport () {
                         }
                       </FormGroup>
                     </Col>
-                    <Col md="8">
+                    <Col md="5">
                       <FormGroup className={name ? '' : "has-danger"}>
                         <Label for="name">Name</Label>
                         <Input
@@ -107,6 +108,18 @@ function TransformationImport () {
                           onChange={onChangeName}
                           placeholder="What would be a good name for this module ?"
                           type="text"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col md="3">
+                      <FormGroup className={nbrInputs ? '' : "has-danger"}>
+                        <Label for="name">Number of parameters in the module</Label>
+                        <Input
+                          id="name"
+                          value={nbrInputs}
+                          onChange={onChangeNbrInputs}
+                          placeholder="Number of parameters"
+                          type="number"
                         />
                       </FormGroup>
                     </Col>
