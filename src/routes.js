@@ -27,6 +27,7 @@ import TransformationImport from './views/TransformationImport'
 import TransformationDetails from './views/TransformationDetails'
 import Datasets from './views/Datasets'
 import DatasetCreation from './views/DatasetCreation'
+import DatasetDetails from './views/DatasetDetails'
 import FluenceTest from "./views/FluenceTest";
 
 var routes = [
@@ -42,6 +43,14 @@ var routes = [
     name: "Create new dataset",
     icon: "tim-icons icon-cloud-upload-94",
     component: DatasetCreation,
+    layout: "/admin",
+    noNav: true,
+  },
+  {
+    path: "/datasets/:id",
+    name: "Dataset details",
+    icon: "tim-icons icon-paper",
+    component: DatasetDetails,
     layout: "/admin",
     noNav: true,
   },

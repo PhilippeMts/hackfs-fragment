@@ -34,6 +34,7 @@ import {
 } from 'reactstrap'
 import { NavLink } from 'react-router-dom'
 import { datasetsStore } from '../utils/localStorage'
+import JsonPreview from '../components/JsonPreview/JsonPreview'
 
 function Datasets () {
 
@@ -76,18 +77,18 @@ function Datasets () {
             </Card>
           </Col>
         </Row>
-        <Row className="datasets">
+        <Row className="all-datasets">
           {
             keys.map(k => datasetsMap[k]).
-              map(({}) => (
+              map(({jsonString, name}) => (
                 <Col md="4">
                   <Card>
                     <CardBody>
                       <CardHeader>
-                        <CardTitle><h4>{'todo'}</h4></CardTitle>
+                        <CardTitle><h4>{name}</h4></CardTitle>
                       </CardHeader>
                       <CardBody>
-                        <CardText>{'todo'}</CardText>
+                        <JsonPreview jsonString={jsonString}/>
                       </CardBody>
                       <CardFooter>
                         {/*TODO*/}
