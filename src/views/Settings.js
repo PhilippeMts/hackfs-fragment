@@ -75,7 +75,8 @@ function Settings () {
                 <CardTitle tag="h4">Connect a Wallet</CardTitle>
               </CardHeader>
               <CardBody>
-                <Button color="primary">Connect</Button>
+                {/* We could integrate with a browser wallet here to get user's DID and fetch IDX information instead of relying on environment variables */}
+                <Button color="primary" disabled>Connect</Button>
               </CardBody>
             </Card>
           </Col>

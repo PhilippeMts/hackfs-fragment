@@ -18,6 +18,8 @@
 /*eslint-disable*/
 import React from 'react'
 
+import stringify from 'json-stringify-nice'
+
 // reactstrap components
 import { ThemeContext, themes } from '../../contexts/ThemeContext'
 import SyntaxHighlighter from 'react-syntax-highlighter'
@@ -26,23 +28,29 @@ import {
   atomOneLight,
 } from 'react-syntax-highlighter/dist/cjs/styles/hljs'
 
-const JsonPreview = ({ jsonString }) => (
-  <>
-    <div id="jsonPreview" className="jsonPreview">
-      {jsonString ?
-        <ThemeContext.Consumer>
-          {({ theme }) => (
-            <SyntaxHighlighter language="json"
-                               style={theme === themes.dark
-                                 ? atomOneDark
-                                 : atomOneLight}>
-              {jsonString}
-            </SyntaxHighlighter>
-          )}
-        </ThemeContext.Consumer>
-        : null}
-    </div>
-  </>
-)
+const JsonPreview = ({ jsonString }) => {
+  let str = jsonString
+  try {
+    str = stringify(JSON.parse(jsonString))
+  } catch {}
+  return (
+    <>
+      <div id="jsonPreview" className="jsonPreview">
+        {jsonString ?
+          <ThemeContext.Consumer>
+            {({ theme }) => (
+              <SyntaxHighlighter language="json"
+                                 style={theme === themes.dark
+                                   ? atomOneDark
+                                   : atomOneLight}>
+                {str}
+              </SyntaxHighlighter>
+            )}
+          </ThemeContext.Consumer>
+          : null}
+      </div>
+    </>
+  )
+}
 
 export default JsonPreview
