@@ -37,16 +37,41 @@ import { datasetsStore } from '../utils/localStorage'
 import NotificationAlert from 'react-notification-alert'
 import copy from 'copy-to-clipboard'
 import { useSelector } from "react-redux";
+import JsonPreview from "../components/JsonPreview/JsonPreview";
 
 function DatasetDetails () {
   const notificationAlertRef = React.useRef(null)
 
   let { id } = useParams()
-  const dataset = useSelector(state => state.dataset.objects[id]);
+  let history = [];
+  const { currentDataset, datasets, transformations } = useSelector(state => {
+    return {
+      currentDataset: state.dataset.objects[id],
+      datasets: state.dataset.objects,
+      transformations: state.transformation.objects
+    }
 
-  const [isOpen, setIsOpen] = useState(false)
+  });
 
-  const toggle = () => setIsOpen(!isOpen)
+  const [toOpen, setToOpen] = useState({})
+  console.log(toOpen)
+  useEffect(() => {
+    if(currentDataset?.history) {
+      if(currentDataset.history.length > 0) {
+        setToOpen({[currentDataset.history[currentDataset.history.length - 1].result.cid]: true})
+      } else {
+        setToOpen({[id]: true})
+      }
+    }
+  }, [currentDataset?.history])
+
+  const toggle = (cid) => {
+    if(!(cid in toOpen)) {
+      setToOpen({...toOpen, [cid]: true});
+    } else {
+      setToOpen({...toOpen, [cid]: !toOpen[cid]});
+    }
+  }
 
   const onIdShareClick = () => {
     copy(`https://localhost:3000/datasets/${id}`)
@@ -85,7 +110,7 @@ function DatasetDetails () {
             <Card>
               <CardHeader>
                 <CardTitle>
-                  <h4>{dataset?.name}</h4>
+                  <h4>{currentDataset?.name}</h4>
                 </CardTitle>
               </CardHeader>
               <CardBody>
@@ -96,7 +121,6 @@ function DatasetDetails () {
                     <td>
                       <p>
                         <code>{id}</code>
-                        TODO LINK
                         <Button className="btn-link ml-2"
                                 color="primary"
                                 href={`https://ipfs.io/ipfs/${id}`} target="_blank"
@@ -130,19 +154,47 @@ function DatasetDetails () {
         <Row className={'history'}>
           <Col lg="12">
             <>
-              {/*TODO WIP to iterate on dataset history items*/}
-              <Card onClick={toggle}>
+              {
+                currentDataset?.history.reverse().map(({transformation, result: { jsonString, cid }}) => (
+                  <Card onClick={() => toggle(cid)}>
+                    <CardHeader>
+                      <CardTitle>
+                        <Row>
+                          <Col lg="10">
+                            <h6>
+                              {transformations[transformation].name}
+                            </h6>
+                            <NavLink className={'ml-4'} to={`/transformations/${transformation}`}>
+                              <CardLink>See More</CardLink>
+                            </NavLink>
+                          </Col>
+                          <Col lg="2" className="text-right">
+                            <Button className="btn-link accordion-toggle-button"
+                                    color="primary" size="sm">
+                              <i className="tim-icons icon-minimal-down"
+                                 color="primary"/>{' '}
+                            </Button>
+                          </Col>
+                        </Row>
+                      </CardTitle>
+                    </CardHeader>
+                    <Collapse isOpen={toOpen[cid]}>
+                      <CardBody className={"dataset-creation"}>
+                        <JsonPreview jsonString={jsonString}/>
+                      </CardBody>
+                    </Collapse>
+
+                  </Card>
+                ))
+              }
+              <Card onClick={() => toggle(id)}>
                 <CardHeader>
                   <CardTitle>
                     <Row>
                       <Col lg="10">
                         <h6>
-                        {'Transformation name TODO'}{' '}
-                        {'TODO difference between initial data and processed data (with transformation name)'}
+                          {currentDataset?.name ? `${currentDataset.name + " - "}Original data` : "Original data"}
                         </h6>
-                        <NavLink className={'ml-4'} to={`/transformations/0`}>
-                          <CardLink>see more TODO</CardLink>
-                        </NavLink>
                       </Col>
                       <Col lg="2" className="text-right">
                         <Button className="btn-link accordion-toggle-button"
@@ -154,18 +206,14 @@ function DatasetDetails () {
                     </Row>
                   </CardTitle>
                 </CardHeader>
-                <Collapse isOpen={isOpen}>
-                  <CardBody>
-                    {'TODO difference between initial data (not tag) and processed data (tag `output data`)'}
-                    Anim pariatur cliche reprehenderit,
-                    enim eiusmod high life accusamus terry richardson ad squid.
-                    Nihil
-                    anim keffiyeh helvetica, craft beer labore wes anderson cred
-                    nesciunt sapiente ea proident.
+                <Collapse isOpen={toOpen[id]}>
+                  <CardBody className={"dataset-creation"}>
+                    <JsonPreview jsonString={currentDataset?.jsonString}/>
                   </CardBody>
                 </Collapse>
 
               </Card>
+
             </>
           </Col>
         </Row>

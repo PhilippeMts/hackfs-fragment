@@ -14,14 +14,14 @@ export const datasetReducer = function (state = initialState, action) {
       return { objects: {...state.objects, [action.payload.cid]: action.payload}  };
     }
     case RESULT_DATASET: {
-      state.objects[action.payload.input].history.push({
-        transformation: action.payload.transformation,
-        result: action.payload.output.cid
-      });
-      return { objects: {
-        ...state.objects,
-        [action.payload.output.cid]: action.payload.output
-      }
+      return {
+        objects: {
+          ...state.objects,
+          [action.payload.input]: {
+            ...state.objects[action.payload.input],
+            history: action.payload.history
+          }
+        }
       };
     }
     default:

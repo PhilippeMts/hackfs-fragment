@@ -69,7 +69,7 @@ function Datasets () {
         <Row className="all-datasets">
           {
            datasetsMap?.
-              map(({jsonString, name, cid}) => (
+              map(({jsonString, name, cid, history}) => (
                 <Col md="4">
                   <Card>
                     <CardBody>
@@ -77,7 +77,7 @@ function Datasets () {
                         <CardTitle><h4>{name}</h4></CardTitle>
                       </CardHeader>
                       <CardBody>
-                        <JsonPreview jsonString={jsonString}/>
+                        <JsonPreview jsonString={history[history.length - 1].result.jsonString}/>
                       </CardBody>
                       <CardFooter>
                         {/*TODO*/}

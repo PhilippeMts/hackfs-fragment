@@ -49,32 +49,37 @@ export const runTransformation = (transformationCID, datasetCID) => async (dispa
       (label, error) => { console.error("📕 deploy_service failed: ", label, error) },
       { ttl: 10000 }
     );
-    console.log("-----------------TUN TRASNFORZ-------------")
 
     subscribeToEvent(client, 'helloService', 'helloFunction', async(args) => {
         const [networkInfo] = args;
 
         const file = await ipfs.add(JSON.stringify(networkInfo));
 
-      await datasetsStore.setItem(
-        file.cid.toString(),
-        {
-          jsonString: JSON.stringify(networkInfo),
-          name: `${datasetCID}-${transformationCID}`,
-          history: []
-        }
-      );
+        // Update parent dataset w/ new transformation
+        const newHistory = dataset.history;
+        newHistory.push({
+          transformation: transformationCID,
+          result: {
+            cid: file.cid.toString(),
+            jsonString: JSON.stringify(networkInfo)
+          }
+        })
+        await datasetsStore.setItem(
+          datasetCID,
+          {
+            jsonString: dataset.jsonString,
+            name: dataset.name,
+            history: newHistory
+          }
+        );
+
+        // Update redux store
         dispatch({
           type: RESULT_DATASET,
           payload: {
             transformation: transformationCID,
             input: datasetCID,
-            output: {
-              cid: file.cid.toString(),
-              jsonString: JSON.stringify(networkInfo),
-              name: `${datasetCID}-${transformationCID}`,
-              history: []
-            }
+            history: newHistory
           }});
     });
 
