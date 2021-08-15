@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "DatasetIssuesRegistry",
+  "type": "object",
+  "description": "For any dataset, identified by its CID, link a set of personal issues.",
+  "properties": {
+    "datasetIssuesWithContext": {
+      "title": "datasetIssuesWithContext",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "datasetCid": {
+            "$ref": "#/definitions/IPFSUrl"
+          },
+          "issues": {
+            "type": "array",
+            "title": "issues",
+            "items": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "title": "description",
+                  "maxLength": 4096
+                },
+                "timestamp": {
+                  "$ref": "#/definitions/Timestamp"
+                }
+              },
+              "required": [
+                "description"
+              ]
+            }
+          }
+        },
+        "required": [
+          "datasetCid",
+          "issues"
+        ]
+      }
+    }
+  },
+  "required": [
+    "datasetIssuesWithContext"
+  ],
+  "definitions": {
+    "IPFSUrl": {
+      "type": "string",
+      "pattern": "^ipfs://.+",
+      "maxLength": 150
+    },
+    "Timestamp": {
+      "type": "string",
+      "title": "timestamp",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):[0-5][0-9]$"
+    }
+  }
+}
