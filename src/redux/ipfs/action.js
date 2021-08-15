@@ -18,8 +18,11 @@ export const initIPFS = (provider) => async (dispatch) => {
   }
 
   let nodeAddress = new Multiaddr(rpcAddress).decapsulateCode(protocols.names.p2p.code).toOptions();
-
+  console.log(nodeAddress)
   const ipfs = await create(nodeAddress);
-  dispatch({ type: INIT_IPFS, payload: {ipfs, nodeAddress, rpcAddress}});
+
+  const localIPFS = await create({family: 4, host: "127.0.0.1", transport: "tcp", port: 5001});
+
+  dispatch({ type: INIT_IPFS, payload: {ipfs, nodeAddress, rpcAddress, localIPFS }});
 }
 

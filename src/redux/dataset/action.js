@@ -17,10 +17,11 @@ export const initDatasets = () => async (dispatch, getState) => {
 }
 
 export const postDataSet = (datasetName, datasetJSON) => async (dispatch, getState) => {
-  const ipfs = getState().ipfs.ipfs;
+  const { ipfs, localIPFS } = getState().ipfs;
 
 
   const file = await ipfs.add(datasetJSON);
+  await localIPFS.add(datasetJSON)
 
   // Add to local storage
   await datasetsStore.setItem(

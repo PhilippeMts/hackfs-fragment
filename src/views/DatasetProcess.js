@@ -105,7 +105,7 @@ function DatasetProcess () {
                 </CardTitle>
               </CardHeader>
               <CardBody>
-                <JsonPreview jsonString={dataset?.jsonString}/>
+                <JsonPreview jsonString={dataset?.history.length > 0 ? dataset?.history[dataset.history.length - 1].result.jsonString : dataset?.jsonString}/>
               </CardBody>
             </Card>
           </Col>

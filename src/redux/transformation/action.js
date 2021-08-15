@@ -20,9 +20,10 @@ export const initTransformations = () => async (dispatch, getState) => {
 }
 
 export const postTransformation = (transformationName, transformationDescription, transformationFile) => async (dispatch, getState) => {
-  const ipfs = getState().ipfs.ipfs;
+  const { ipfs, localIPFS } = getState().ipfs;
 
   const file = await ipfs.add(transformationFile);
+  await localIPFS.add(transformationFile)
 
     // Add to local storage
     await transformationsStore.setItem(
@@ -39,7 +40,7 @@ export const postTransformation = (transformationName, transformationDescription
 }
 
 export const runTransformation = (transformationCID, datasetCID) => async (dispatch, getState) => {
-    const { rpcAddress, ipfs } = getState().ipfs;
+    const { rpcAddress, ipfs, localIPFS } = getState().ipfs;
     const dataset = getState().dataset.objects[datasetCID];
     const { client, environment } = getState().fluence
 
@@ -55,6 +56,8 @@ export const runTransformation = (transformationCID, datasetCID) => async (dispa
     const [networkInfo] = args;
 
     const file = await ipfs.add(JSON.stringify(networkInfo));
+    await localIPFS.add(JSON.stringify(networkInfo));
+
 
     // Update parent dataset w/ new transformation
     const newHistory = dataset.history;
