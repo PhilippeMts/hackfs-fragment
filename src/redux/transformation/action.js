@@ -2,8 +2,8 @@ import { deploy_service } from "../../utils/process";
 import { Particle, sendParticle, subscribeToEvent } from "@fluencelabs/fluence";
 import { datasetsStore, transformationsStore } from "../../utils/localStorage";
 import { RESULT_DATASET, SET_DATASET } from "../dataset/action";
-import { encode } from '@ipld/dag-cbor'
-import { CID } from 'multiformats'
+import { decode,encode } from '@ipld/dag-cbor'
+import { CID } from 'multiformats';
 
 export const INIT_TRANSFORMATIONS = "INIT_TRANSFORMATIONS";
 export const SET_TRANSFORMATION = "SET_TRANSFORMATION";
@@ -75,9 +75,9 @@ export const runTransformation = (transformationCID, datasetCID) => async (dispa
         transformationBytecode: CID.parse(transformationCID)
       }
     }
-    let historyItem = encode(historyItemObject)
-    const ipld = await ipfs.add(historyItem);
 
+    const ipld = await localIPFS.dag.put(historyItemObject, {format: 'dag-cbor', hashAlg: 'sha2-256'})
+    console.log(ipld, ipld.toString())
     // Update parent dataset w/ new transformation
     const newHistory = dataset.history;
     const newElement = {
@@ -86,7 +86,7 @@ export const runTransformation = (transformationCID, datasetCID) => async (dispa
         cid: file.cid.toString(),
         jsonString: JSON.stringify(networkInfo)
       },
-      ipldCID: ipld.cid.toString()
+      ipldCID: ipld.toString()
     };
     if(!containsElement(newElement, newHistory)){
       newHistory.push(newElement);

@@ -156,7 +156,7 @@ function DatasetDetails () {
           <Col lg="12">
             <>
               {
-                history.slice(0).reverse().map(({transformation, result: { jsonString, cid }}) => (
+                history.slice(0).reverse().map(({transformation, result: { jsonString, cid }, ipldCID}) => (
                   <Card onClick={() => toggle(cid)}>
                     <CardHeader>
                       <CardTitle>
@@ -164,10 +164,18 @@ function DatasetDetails () {
                           <Col lg="10">
                             <h6>
                               {transformations[transformation].name}
+                              <NavLink className={'ml-4'} to={`/transformations/${transformation}`}>
+                                <CardLink>See More</CardLink>
+                              </NavLink>
                             </h6>
-                            <NavLink className={'ml-4'} to={`/transformations/${transformation}`}>
-                              <CardLink>See More</CardLink>
-                            </NavLink>
+                            <code>{ipldCID}</code>
+                            <Button className="btn-link ml-2"
+                                    color="primary"
+                                    href={`https://explore.ipld.io/#/explore/${ipldCID}`} target="_blank"
+                                    rel="noopener noreferrer"
+                            >
+                              See on IPFS
+                            </Button>
                           </Col>
                           <Col lg="2" className="text-right">
                             <Button className="btn-link accordion-toggle-button"
