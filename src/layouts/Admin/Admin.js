@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useEffect } from "react";
 import {Redirect, Route, Switch, useLocation} from "react-router-dom";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
@@ -28,6 +28,10 @@ import routes from "routes.js";
 
 import logo from "assets/img/react-logo.png";
 import {BackgroundColorContext} from "contexts/BackgroundColorContext";
+import { useDispatch } from "react-redux";
+import { initFluence } from "../../redux/fluence/action";
+import { initTransformations } from "../../redux/transformation/action";
+import { initDatasets } from "../../redux/dataset/action";
 
 var ps;
 
@@ -100,6 +104,24 @@ function Admin() {
     }
     return "Brand";
   };
+
+  /******************************************************************
+   * INIT REDUX
+   ******************************************************************/
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(initFluence());
+  }, []);
+
+  useEffect(() => {
+    dispatch(initTransformations());
+  }, []);
+
+  useEffect(() => {
+    dispatch(initDatasets());
+  }, []);
+
   return (
     <BackgroundColorContext.Consumer>
       {() => (
