@@ -77,7 +77,7 @@ function Datasets () {
                         <CardTitle><h4>{name}</h4></CardTitle>
                       </CardHeader>
                       <CardBody>
-                        <JsonPreview jsonString={history[history.length - 1].result.jsonString}/>
+                        <JsonPreview jsonString={history.length > 0 ? history[history.length - 1].result.jsonString : jsonString}/>
                       </CardBody>
                       <CardFooter>
                         {/*TODO*/}
