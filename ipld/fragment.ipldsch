@@ -1,0 +1,45 @@
+## =====
+## This schema describes structures used in Fragment.
+##
+## Version : 0
+## =====
+
+
+## -----
+## Basic structures
+## -----
+
+## At each step of its history, a data element can be serialized to the RepresentationKind.
+##
+## See https://ipld.io/specs/schemas/schema-schema.ipldsch for more information on basic types.
+type HistoryDataElement = RepresentationKind
+
+## Transformation Wasm bytecodes should be stored as valid Bytes-kind objects.
+type TransformationBytecode = Bytes
+
+## -----
+## Fragment structures
+## -----
+
+## The HistoryItemInputs type helps gathering assets required for the execution of a transformation : input data and 
+## transformation bytecode.  
+type HistoryItemInputs struct {
+    inputData               &HistoryDataElement
+    transformationBytecode  &TransformationBytecode
+} representation tuple
+
+## The first data element of a data history is not linked to any previous element. THe HistoryOptionalItemInputs type
+## helps making the source optional. 
+##
+## The `link` kind of the `Inputs` item is mainly a placeholder for the day IPLD supports expressive representation, in its DSL,
+## of typed references. Here we would precise this kind as `&HistoryItemInputs`.
+type HistoryOptionalItemInputs union {
+  | InitialData  null
+  | Inputs        link
+} representation kinded
+
+## Finally, the HistoryItem creates a formal data history as a stack of HistoryItem objects.
+type HistoryItem struct {
+    outputData      &HistoryDataElement
+    inputs          &HistoryOptionalItemInputs
+} representation tuple

@@ -15,25 +15,27 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
-import { Route, Switch, Redirect, useLocation } from "react-router-dom";
+import React, { useEffect } from "react";
+import {Redirect, Route, Switch, useLocation} from "react-router-dom";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
 
 // core components
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
-import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
-import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
 import routes from "routes.js";
 
 import logo from "assets/img/react-logo.png";
-import { BackgroundColorContext } from "contexts/BackgroundColorContext";
+import {BackgroundColorContext} from "contexts/BackgroundColorContext";
+import { useDispatch } from "react-redux";
+import { initFluence } from "../../redux/fluence/action";
+import { initTransformations } from "../../redux/transformation/action";
+import { initDatasets } from "../../redux/dataset/action";
 
 var ps;
 
-function Admin(props) {
+function Admin() {
   const location = useLocation();
   const mainPanelRef = React.useRef(null);
   const [sidebarOpened, setsidebarOpened] = React.useState(
@@ -83,9 +85,10 @@ function Admin(props) {
       if (prop.layout === "/admin") {
         return (
           <Route
-            path={prop.layout + prop.path}
+            path={prop.path}
             component={prop.component}
             key={key}
+            exact
           />
         );
       } else {
@@ -93,29 +96,47 @@ function Admin(props) {
       }
     });
   };
-  const getBrandText = (path) => {
+  const getBrandText = () => {
     for (let i = 0; i < routes.length; i++) {
-      if (location.pathname.indexOf(routes[i].layout + routes[i].path) !== -1) {
+      if (location.pathname.indexOf(routes[i].path) !== -1) {
         return routes[i].name;
       }
     }
     return "Brand";
   };
+
+  /******************************************************************
+   * INIT REDUX
+   ******************************************************************/
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(initFluence());
+  }, []);
+
+  useEffect(() => {
+    dispatch(initTransformations());
+  }, []);
+
+  useEffect(() => {
+    dispatch(initDatasets());
+  }, []);
+
   return (
     <BackgroundColorContext.Consumer>
-      {({ color, changeColor }) => (
+      {() => (
         <React.Fragment>
           <div className="wrapper">
             <Sidebar
               routes={routes}
               logo={{
-                outterLink: "https://www.creative-tim.com/",
-                text: "Creative Tim",
+                outterLink: "https://showcase.ethglobal.co/hackfs2021/fragment/",
+                text: "Fragment",
                 imgSrc: logo,
               }}
               toggleSidebar={toggleSidebar}
             />
-            <div className="main-panel" ref={mainPanelRef} data={color}>
+            <div className="main-panel" ref={mainPanelRef} >
               <AdminNavbar
                 brandText={getBrandText(location.pathname)}
                 toggleSidebar={toggleSidebar}
@@ -123,15 +144,10 @@ function Admin(props) {
               />
               <Switch>
                 {getRoutes(routes)}
-                <Redirect from="*" to="/admin/dashboard" />
+                <Redirect from="*" to="/datasets" />
               </Switch>
-              {
-                // we don't want the Footer to be rendered on map page
-                location.pathname === "/admin/maps" ? null : <Footer fluid />
-              }
             </div>
           </div>
-          <FixedPlugin bgColor={color} handleBgClick={changeColor} />
         </React.Fragment>
       )}
     </BackgroundColorContext.Consumer>

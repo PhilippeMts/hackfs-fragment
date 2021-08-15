@@ -15,79 +15,76 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import Dashboard from "views/Dashboard.js";
-import Icons from "views/Icons.js";
-import Map from "views/Map.js";
-import Notifications from "views/Notifications.js";
-import Rtl from "views/Rtl.js";
-import TableList from "views/TableList.js";
-import Typography from "views/Typography.js";
-import UserProfile from "views/UserProfile.js";
+import Settings from "./views/Settings";
+import Transformations from './views/Transformations'
+import TransformationImport from './views/TransformationImport'
+import TransformationDetails from './views/TransformationDetails'
+import Datasets from './views/Datasets'
+import DatasetCreation from './views/DatasetCreation'
+import DatasetDetails from './views/DatasetDetails'
+import DatasetProcess from './views/DatasetProcess'
 
 var routes = [
   {
-    path: "/dashboard",
-    name: "Dashboard",
-    rtlName: "لوحة القيادة",
-    icon: "tim-icons icon-chart-pie-36",
-    component: Dashboard,
+    path: "/datasets",
+    name: "Datasets",
+    icon: "tim-icons icon-bullet-list-67",
+    component: Datasets,
     layout: "/admin",
   },
   {
-    path: "/icons",
-    name: "Icons",
-    rtlName: "الرموز",
-    icon: "tim-icons icon-atom",
-    component: Icons,
+    path: "/datasets/new",
+    name: "Create new dataset",
+    icon: "tim-icons icon-cloud-upload-94",
+    component: DatasetCreation,
+    layout: "/admin",
+    noNav: true,
+  },
+  {
+    path: "/datasets/:id",
+    name: "Dataset details",
+    icon: "tim-icons icon-paper",
+    component: DatasetDetails,
+    layout: "/admin",
+    noNav: true,
+  },
+  {
+    path: "/datasets/:id/process",
+    name: "Run new transformation",
+    icon: "tim-icons icon-spaceship",
+    component: DatasetProcess,
+    layout: "/admin",
+    noNav: true,
+  },
+  {
+    path: "/transformations",
+    name: "Transformations",
+    icon: "tim-icons icon-app",
+    component: Transformations,
     layout: "/admin",
   },
   {
-    path: "/map",
-    name: "Map",
-    rtlName: "خرائط",
-    icon: "tim-icons icon-pin",
-    component: Map,
+    path: "/transformations/new",
+    name: "Import new transformation",
+    icon: "tim-icons icon-cloud-upload-94",
+    component: TransformationImport,
     layout: "/admin",
+    noNav: true,
   },
   {
-    path: "/notifications",
-    name: "Notifications",
-    rtlName: "إخطارات",
-    icon: "tim-icons icon-bell-55",
-    component: Notifications,
+    path: "/transformations/:id",
+    name: "Transformation details",
+    icon: "tim-icons icon-paper",
+    component: TransformationDetails,
     layout: "/admin",
+    noNav: true,
   },
   {
-    path: "/user-profile",
-    name: "User Profile",
-    rtlName: "ملف تعريفي للمستخدم",
-    icon: "tim-icons icon-single-02",
-    component: UserProfile,
+    path: "/settings",
+    name: "Settings",
+    icon: "tim-icons icon-settings",
+    component: Settings,
     layout: "/admin",
-  },
-  {
-    path: "/tables",
-    name: "Table List",
-    rtlName: "قائمة الجدول",
-    icon: "tim-icons icon-puzzle-10",
-    component: TableList,
-    layout: "/admin",
-  },
-  {
-    path: "/typography",
-    name: "Typography",
-    rtlName: "طباعة",
-    icon: "tim-icons icon-align-center",
-    component: Typography,
-    layout: "/admin",
-  },
-  {
-    path: "/rtl-support",
-    name: "RTL Support",
-    rtlName: "ار تي ال",
-    icon: "tim-icons icon-world",
-    component: Rtl,
-    layout: "/rtl",
   },
 ];
 export default routes;
