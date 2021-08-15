@@ -38,6 +38,8 @@ import {
   NavLink,
   UncontrolledDropdown,
 } from 'reactstrap'
+import { IdxContext } from '../../contexts/IdxContext'
+import { ipfsToGateway } from '../../utils/idx'
 
 function AdminNavbar (props) {
   const [collapseOpen, setcollapseOpen] = React.useState(false)
@@ -112,10 +114,17 @@ function AdminNavbar (props) {
                   onClick={(e) => e.preventDefault()}
                 >
                   <div className="photo">
-                    <img
-                      alt="..."
-                      src={require('assets/img/anime3.png').default}
-                    />
+                    <IdxContext.Consumer>
+                      {({ basicProfileImage }) =>
+                        (
+                          <>
+                            <img
+                              alt="..."
+                              src={basicProfileImage ? ipfsToGateway(basicProfileImage) : require('assets/img/default-avatar.png').default}
+                            />
+                          </>
+                        )}
+                    </IdxContext.Consumer>
                   </div>
                   <b className="caret d-none d-lg-block d-xl-block"/>
                   <p className="d-lg-none">Log out</p>
