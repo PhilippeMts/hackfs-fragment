@@ -24,3 +24,10 @@ If you want to test it locally, just follow the [installation instructions](http
   }
 }
 ```
+
+#### Dataset issues registry
+
+Flexible collaboration on datasets is enabled through Ceramic and IDX using a [schema](./schemas/datasetIssuesRegistry.json) that helps users publish, read and resolve issues related to datasets at any stage of their history.
+
+The schema is available on the [Ceramic](ceramic://k3y52l7qbv1frxifyyljgtvtifjku9c1ckkxwc012dtryd43nufsue3c50dgd62v4) network
+and a related definition has been published and is discoverable with StreamID `kjzl6cwe1jw147lktei14azq9e8terqrjthpd2nbt1bpmk23ofr0vklh1yjlhq3`.
