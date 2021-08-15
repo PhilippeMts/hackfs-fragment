@@ -22,9 +22,10 @@ export const initTransformations = () => async (dispatch, getState) => {
 }
 
 export const postTransformation = (transformationName, transformationDescription, transformationFile) => async (dispatch, getState) => {
-  const ipfs = getState().ipfs.ipfs;
+  const { ipfs, localIPFS } = getState().ipfs;
 
   const file = await ipfs.add(transformationFile);
+  await localIPFS.add(transformationFile)
 
     // Add to local storage
     await transformationsStore.setItem(
@@ -41,7 +42,7 @@ export const postTransformation = (transformationName, transformationDescription
 }
 
 export const runTransformation = (transformationCID, datasetCID) => async (dispatch, getState) => {
-    const { rpcAddress, ipfs } = getState().ipfs;
+    const { rpcAddress, ipfs, localIPFS } = getState().ipfs;
     const dataset = getState().dataset.objects[datasetCID];
     const { client, environment } = getState().fluence
 
@@ -52,51 +53,65 @@ export const runTransformation = (transformationCID, datasetCID) => async (dispa
       { ttl: 10000 }
     );
 
-    subscribeToEvent(client, 'helloService', 'helloFunction', async(args) => {
-        const [networkInfo] = args;
+    const data = dataset.history[dataset.history.length - 1] ?
+      dataset.history[dataset.history.length - 1].result.jsonString :
+      dataset.jsonString;
+    const dataCID = dataset.history[dataset.history.length - 1] ?
+      dataset.history[dataset.history.length - 1].result.cid :
+      datasetCID;
 
-        const file = await ipfs.add(JSON.stringify(networkInfo));
+    const unsubscribe = subscribeToEvent(client, 'helloService', 'helloFunction', async(args) => {
+    const [networkInfo] = args;
 
-        // Build a new HistoryItem IPLD object.
-        // For simplification, we do not formally comply with recommended Fragment recommended here.
-      const historyItemObject = {
-        outputData: file.cid,
-        inputs: {
-          inputData: CID.parse('datasetCID'),
-          transformationBytecode: CID.parse('transformationCID')
-        }
+    const file = await ipfs.add(JSON.stringify(networkInfo));
+    await localIPFS.add(JSON.stringify(networkInfo));
+
+    // Build a new HistoryItem IPLD object.
+    // For simplification, we do not formally comply with recommended Fragment recommended here.
+    const historyItemObject = {
+      outputData: file.cid,
+      inputs: {
+        inputData: CID.parse(dataCID),
+        transformationBytecode: CID.parse(transformationCID)
       }
-      let historyItem = encode(historyItemObject)
-      ipfs.add(historyItem);
+    }
+    let historyItem = encode(historyItemObject)
+    const ipld = await ipfs.add(historyItem);
 
+    // Update parent dataset w/ new transformation
+    const newHistory = dataset.history;
+    const newElement = {
+      transformation: transformationCID,
+      result: {
+        cid: file.cid.toString(),
+        jsonString: JSON.stringify(networkInfo)
+      },
+      ipldCID: ipld.cid.toString()
+    };
+    if(!containsElement(newElement, newHistory)){
+      newHistory.push(newElement);
 
-        // Update parent dataset w/ new transformation
-        const newHistory = dataset.history;
-        newHistory.push({
+      await datasetsStore.setItem(
+        datasetCID,
+        {
+          jsonString: dataset.jsonString,
+          name: dataset.name,
+          history: newHistory
+        }
+      );
+
+      // Update redux store
+      dispatch({
+        type: RESULT_DATASET,
+        payload: {
           transformation: transformationCID,
-          result: {
-            cid: file.cid.toString(),
-            jsonString: JSON.stringify(networkInfo)
-          }
-        })
-        await datasetsStore.setItem(
-          datasetCID,
-          {
-            jsonString: dataset.jsonString,
-            name: dataset.name,
-            history: newHistory
-          }
-        );
+          input: datasetCID,
+          history: newHistory
+        }});
+    }
+    unsubscribe();
+  });
 
-        // Update redux store
-        dispatch({
-          type: RESULT_DATASET,
-          payload: {
-            transformation: transformationCID,
-            input: datasetCID,
-            history: newHistory
-          }});
-    });
 
     const particle = new Particle(
       `
@@ -108,9 +123,21 @@ export const runTransformation = (transformationCID, datasetCID) => async (dispa
       {
           relay: environment[0].peerId,
           service: serviceId,
-          arg_0: JSON.parse(dataset.jsonString.replace(/\n/g, ""))
+          arg_0: JSON.parse(data.replace(/\n/g, ""))
       },
     );
     await sendParticle(client, particle);
 }
 
+// Utils
+
+function containsElement(obj, list) {
+  var i;
+  for (i = 0; i < list.length; i++) {
+    if (list[i].result.cid === obj.result.cid) {
+      return true;
+    }
+  }
+
+  return false;
+}

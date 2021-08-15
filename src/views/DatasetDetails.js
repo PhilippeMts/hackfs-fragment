@@ -43,7 +43,7 @@ function DatasetDetails () {
   const notificationAlertRef = React.useRef(null)
 
   let { id } = useParams()
-  let history = [];
+  let [history, setHistory] = useState([]);
   const { currentDataset, datasets, transformations } = useSelector(state => {
     return {
       currentDataset: state.dataset.objects[id],
@@ -54,9 +54,10 @@ function DatasetDetails () {
   });
 
   const [toOpen, setToOpen] = useState({})
-  console.log(toOpen)
+
   useEffect(() => {
     if(currentDataset?.history) {
+      setHistory(currentDataset.history);
       if(currentDataset.history.length > 0) {
         setToOpen({[currentDataset.history[currentDataset.history.length - 1].result.cid]: true})
       } else {
@@ -155,7 +156,7 @@ function DatasetDetails () {
           <Col lg="12">
             <>
               {
-                currentDataset?.history.reverse().map(({transformation, result: { jsonString, cid }}) => (
+                history.slice(0).reverse().map(({transformation, result: { jsonString, cid }}) => (
                   <Card onClick={() => toggle(cid)}>
                     <CardHeader>
                       <CardTitle>
