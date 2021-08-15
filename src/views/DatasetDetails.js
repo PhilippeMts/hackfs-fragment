@@ -121,10 +121,10 @@ function DatasetDetails () {
                     <td>ID</td>
                     <td>
                       <p>
-                        <code>{id}</code>
+                        <code>{history?.length > 0 ? history[history.length - 1].ipldCID : id}</code>
                         <Button className="btn-link ml-2"
                                 color="primary"
-                                href={`https://ipfs.io/ipfs/${id}`} target="_blank"
+                                href={history?.length > 0 ? `https://explore.ipld.io/#/explore/${history[history.length - 1].ipldCID}` : `https://ipfs.io/ipfs/${id}`} target="_blank"
                                 rel="noopener noreferrer"
                         >
                           See on IPFS

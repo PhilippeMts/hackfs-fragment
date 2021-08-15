@@ -2,6 +2,8 @@ import { deploy_service } from "../../utils/process";
 import { Particle, sendParticle, subscribeToEvent } from "@fluencelabs/fluence";
 import { datasetsStore, transformationsStore } from "../../utils/localStorage";
 import { RESULT_DATASET, SET_DATASET } from "../dataset/action";
+import { encode } from '@ipld/dag-cbor'
+import { CID } from 'multiformats'
 
 export const INIT_TRANSFORMATIONS = "INIT_TRANSFORMATIONS";
 export const SET_TRANSFORMATION = "SET_TRANSFORMATION";
@@ -51,13 +53,30 @@ export const runTransformation = (transformationCID, datasetCID) => async (dispa
       { ttl: 10000 }
     );
 
+    const data = dataset.history[dataset.history.length - 1] ?
+      dataset.history[dataset.history.length - 1].result.jsonString :
+      dataset.jsonString;
+    const dataCID = dataset.history[dataset.history.length - 1] ?
+      dataset.history[dataset.history.length - 1].result.cid :
+      datasetCID;
 
-  const unsubscribe = subscribeToEvent(client, 'helloService', 'helloFunction', async(args) => {
+    const unsubscribe = subscribeToEvent(client, 'helloService', 'helloFunction', async(args) => {
     const [networkInfo] = args;
 
     const file = await ipfs.add(JSON.stringify(networkInfo));
     await localIPFS.add(JSON.stringify(networkInfo));
 
+    // Build a new HistoryItem IPLD object.
+    // For simplification, we do not formally comply with recommended Fragment recommended here.
+    const historyItemObject = {
+      outputData: file.cid,
+      inputs: {
+        inputData: CID.parse(dataCID),
+        transformationBytecode: CID.parse(transformationCID)
+      }
+    }
+    let historyItem = encode(historyItemObject)
+    const ipld = await ipfs.add(historyItem);
 
     // Update parent dataset w/ new transformation
     const newHistory = dataset.history;
@@ -66,18 +85,11 @@ export const runTransformation = (transformationCID, datasetCID) => async (dispa
       result: {
         cid: file.cid.toString(),
         jsonString: JSON.stringify(networkInfo)
-      }
+      },
+      ipldCID: ipld.cid.toString()
     };
     if(!containsElement(newElement, newHistory)){
-      console.log(newHistory, newElement)
-      newHistory.push({
-        transformation: transformationCID,
-        result: {
-          cid: file.cid.toString(),
-          jsonString: JSON.stringify(networkInfo)
-        }
-      });
-      console.log(newHistory)
+      newHistory.push(newElement);
 
       await datasetsStore.setItem(
         datasetCID,
@@ -100,9 +112,6 @@ export const runTransformation = (transformationCID, datasetCID) => async (dispa
     unsubscribe();
   });
 
-    const data = dataset.history[dataset.history.length - 1] ?
-      dataset.history[dataset.history.length - 1].result.jsonString :
-      dataset.jsonString;
 
     const particle = new Particle(
       `
