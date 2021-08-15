@@ -9,6 +9,7 @@ export const initIPFS = (provider) => async (dispatch) => {
   let rpcAddress;
   // TODO check for provider.relayPeerId
   const result = await get_external_api_multiaddr(provider, provider.relayPeerId);
+
   if (result.success) {
     rpcAddress = result.multiaddr;
   } else {

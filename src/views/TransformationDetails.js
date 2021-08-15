@@ -92,7 +92,7 @@ function TransformationDetails () {
                         <code>{id}</code>
                         <Button className="btn-link ml-2"
                                 color="primary"
-                                href={`https://ipfs.io/ipfs${id}`} target="_blank"
+                                href={`https://ipfs.io/ipfs/${id}`} target="_blank"
                                 rel="noopener noreferrer"
                         >
                           See on IPFS
