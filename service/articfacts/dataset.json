@@ -1,5 +1,5 @@
 {
-  number: 0,
-  string: "",
-  bool: false
+  "number": 0,
+  "string": "",
+  "bool": false
 }

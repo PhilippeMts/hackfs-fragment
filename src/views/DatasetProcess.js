@@ -35,22 +35,22 @@ import {
 } from 'reactstrap'
 import { NavLink, useHistory, useParams } from 'react-router-dom'
 import { datasetsStore } from '../utils/localStorage'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import NotificationAlert from 'react-notification-alert'
+import JsonPreview from "../components/JsonPreview/JsonPreview";
+import { runTransformation } from "../redux/transformation/action";
 
 function DatasetProcess () {
   const history = useHistory()
+  const dispatch = useDispatch();
   const notificationAlertRef = React.useRef(null)
   const [isPending, setIsPending] = useState(false)
 
   let { id } = useParams()
-  const [dataset, setDataset] = useState({})
-  const [selectedTransformationId, setSelectedTransformationId] = useState('')
-  const getDataset = async () => {
-    setDataset(await datasetsStore.getItem(id))
-  }
-  useEffect(getDataset, [])
 
+  const [selectedTransformationId, setSelectedTransformationId] = useState('')
+
+  const dataset = useSelector(state => state.dataset.objects[id]);
   const transformationsMap = useSelector(
     state => Object.values(state.transformation.objects))
 
@@ -60,7 +60,7 @@ function DatasetProcess () {
 
   const run = () => {
     setIsPending(true)
-    // TODO run and everything
+    dispatch(runTransformation(selectedTransformationId, id))
     const options = {
       place: 'tr',
       message: (
@@ -78,7 +78,7 @@ function DatasetProcess () {
     notificationAlertRef.current.notificationAlert(options)
     // TODO
     setTimeout(() => {
-      history.push('/datasets/0')
+      history.push(`/datasets/${id}`)
     }, 4000)
   }
 
@@ -98,14 +98,14 @@ function DatasetProcess () {
         </Breadcrumb>
         <Row>
           <Col sm="12" md="10" lg="8">
-            <Card>
+            <Card className={"dataset-creation"}>
               <CardHeader>
                 <CardTitle>
-                  <h4><b>1. Select a dataset: </b>{dataset.name}</h4>
+                  <h4><b>1. Select a dataset: </b>{dataset?.name}</h4>
                 </CardTitle>
               </CardHeader>
               <CardBody>
-                {'TODO JSON goes here'}
+                <JsonPreview jsonString={dataset?.jsonString}/>
               </CardBody>
             </Card>
           </Col>
@@ -124,8 +124,8 @@ function DatasetProcess () {
         <Row className="all-transformations">
           {
             transformationsMap?.
-              map(({ name, desc }) => (
-                <Col md="4" key={'unique_key_todo'}>
+              map(({ name, desc, cid }) => (
+                <Col md="4" key={cid}>
                   <Card>
                     <CardBody>
                       <CardHeader>
@@ -138,9 +138,9 @@ function DatasetProcess () {
                         <FormGroup check inline className="form-check-radio">
                           <Label className="form-check-label">
                             <Input type="radio"
-                                   value="todo_id"
+                                   value={cid}
                                    checked={selectedTransformationId ===
-                                   'todo_id'}
+                                   cid}
                                    onChange={onTransformationChange}/>
                             select this transformation
                             <span className="form-check-sign"/>
