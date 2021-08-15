@@ -2,6 +2,8 @@ import { deploy_service } from "../../utils/process";
 import { Particle, sendParticle, subscribeToEvent } from "@fluencelabs/fluence";
 import { datasetsStore, transformationsStore } from "../../utils/localStorage";
 import { RESULT_DATASET, SET_DATASET } from "../dataset/action";
+import { encode } from '@ipld/dag-cbor'
+import { CID } from 'multiformats'
 
 export const INIT_TRANSFORMATIONS = "INIT_TRANSFORMATIONS";
 export const SET_TRANSFORMATION = "SET_TRANSFORMATION";
@@ -54,6 +56,19 @@ export const runTransformation = (transformationCID, datasetCID) => async (dispa
         const [networkInfo] = args;
 
         const file = await ipfs.add(JSON.stringify(networkInfo));
+
+        // Build a new HistoryItem IPLD object.
+        // For simplification, we do not formally comply with recommended Fragment recommended here.
+      const historyItemObject = {
+        outputData: file.cid,
+        inputs: {
+          inputData: CID.parse('datasetCID'),
+          transformationBytecode: CID.parse('transformationCID')
+        }
+      }
+      let historyItem = encode(historyItemObject)
+      ipfs.add(historyItem);
+
 
         // Update parent dataset w/ new transformation
         const newHistory = dataset.history;

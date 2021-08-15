@@ -10,6 +10,7 @@
     "@fluencelabs/fluence": "^0.9.54",
     "@fluencelabs/fluence-network-environment": "^1.0.10",
     "@fortawesome/fontawesome-free": "5.15.1",
+    "@ipld/dag-cbor": "^6.0.9",
     "@pinata/ipfs-gateway-tools": "^1.1.6",
     "bootstrap": "4.5.3",
     "chart.js": "2.9.4",
