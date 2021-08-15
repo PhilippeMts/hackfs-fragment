@@ -2,6 +2,7 @@ import { datasetsStore } from "../../utils/localStorage";
 
 export const INIT_DATASET = "INIT_DATASET";
 export const SET_DATASET = "SET_DATASET";
+export const RESULT_DATASET = "RESULT_DATASET";
 
 export const initDatasets = () => async (dispatch, getState) => {
   const datasetKeys = await datasetsStore.keys();
@@ -27,9 +28,10 @@ export const postDataSet = (datasetName, datasetJSON) => async (dispatch, getSta
     {
       jsonString: datasetJSON,
       name: datasetName,
+      history: []
     }
   );
 
 
-  dispatch({ type: SET_DATASET, payload: {name: datasetName, jsonString: datasetJSON, cid: file.cid.toString()}});
+  dispatch({ type: SET_DATASET, payload: {name: datasetName, jsonString: datasetJSON, cid: file.cid.toString(), history: [] }});
 }

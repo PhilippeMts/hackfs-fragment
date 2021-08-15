@@ -11,12 +11,7 @@ export const transformationReducer = function (state = initialState, action) {
       return { objects: action.payload.objects };
     }
     case SET_TRANSFORMATION: {
-      // TODO do something W/ local storage
       return { objects: {...state.objects, [action.payload.cid]: action.payload}  };
-    }
-    case TRANSFORMATION_RUN: {
-      // TODO do something W/ local storage
-      return state;
     }
     default:
       return state;

@@ -61,7 +61,7 @@ function Transformations () {
         <Row className="all-transformations">
           {
             transformationsMap?.
-              map(({ name, desc }) => (
+              map(({ name, desc, cid }) => (
                 <Col md="4">
                   <Card>
                     <CardBody>
@@ -73,8 +73,8 @@ function Transformations () {
                       </CardBody>
                       <CardFooter>
                         {/*TODO*/}
-                        <NavLink to={`/transformations/0`}>
-                          <CardLink>Card link TODO</CardLink>
+                        <NavLink to={`/transformations/${cid}`}>
+                          <CardLink>View</CardLink>
                         </NavLink>
                       </CardFooter>
                     </CardBody>

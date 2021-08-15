@@ -34,19 +34,16 @@ import { NavLink, useParams } from 'react-router-dom'
 import { transformationsStore } from '../utils/localStorage'
 import NotificationAlert from 'react-notification-alert'
 import copy from 'copy-to-clipboard'
+import { useSelector } from "react-redux";
 
 function TransformationDetails () {
   const notificationAlertRef = React.useRef(null)
 
   let { id } = useParams()
-  const [transformation, setTransformation] = useState({})
-  const getTransformation = async () => {
-    setTransformation(await transformationsStore.getItem(id))
-  }
-  useEffect(getTransformation, [])
+  const transformation = useSelector(state => state.transformation.objects[id]);
 
   const onIdCopyClick = () => {
-    copy('TODO')
+    copy(id)
     const options = {
       place: 'tr',
       message: (
@@ -82,7 +79,7 @@ function TransformationDetails () {
             <Card>
               <CardHeader>
                 <CardTitle>
-                  <h4>{transformation.name}</h4>
+                  <h4>{transformation?.name}</h4>
                 </CardTitle>
               </CardHeader>
               <CardBody>
@@ -92,10 +89,10 @@ function TransformationDetails () {
                     <td>ID</td>
                     <td>
                       <p>
-                        <code>TODO</code>
+                        <code>{id}</code>
                         <Button className="btn-link ml-2"
                                 color="primary"
-                                href="https://ipfs.io/TODO" target="_blank"
+                                href={`https://ipfs.io/ipfs${id}`} target="_blank"
                                 rel="noopener noreferrer"
                         >
                           See on IPFS
@@ -127,7 +124,7 @@ function TransformationDetails () {
                   <tr>
                     <td>Description</td>
                     <td>
-                      <p>{transformation.desc}</p>
+                      <p>{transformation?.desc}</p>
                     </td>
                   </tr>
                   </tbody>

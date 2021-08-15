@@ -15,12 +15,6 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import Dashboard from "views/Dashboard.js";
-import Icons from "views/Icons.js";
-import Notifications from "views/Notifications.js";
-import TableList from "views/TableList.js";
-import Typography from "views/Typography.js";
-import UserProfile from "views/UserProfile.js";
 import Settings from "./views/Settings";
 import Transformations from './views/Transformations'
 import TransformationImport from './views/TransformationImport'
@@ -28,7 +22,6 @@ import TransformationDetails from './views/TransformationDetails'
 import Datasets from './views/Datasets'
 import DatasetCreation from './views/DatasetCreation'
 import DatasetDetails from './views/DatasetDetails'
-import FluenceTest from "./views/FluenceTest";
 import DatasetProcess from './views/DatasetProcess'
 
 var routes = [
@@ -91,61 +84,6 @@ var routes = [
     name: "Settings",
     icon: "tim-icons icon-settings",
     component: Settings,
-    layout: "/admin",
-  },
-  {
-    path: "/fluence",
-    name: "Fluence",
-    icon: "tim-icons icon-bullet-list-67",
-    component: FluenceTest,
-    layout: "/admin",
-  },
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    rtlName: "لوحة القيادة",
-    icon: "tim-icons icon-chart-pie-36",
-    component: Dashboard,
-    layout: "/admin",
-  },
-  {
-    path: "/icons",
-    name: "Icons",
-    rtlName: "الرموز",
-    icon: "tim-icons icon-atom",
-    component: Icons,
-    layout: "/admin",
-  },
-  {
-    path: "/notifications",
-    name: "Notifications",
-    rtlName: "إخطارات",
-    icon: "tim-icons icon-bell-55",
-    component: Notifications,
-    layout: "/admin",
-  },
-  {
-    path: "/user-profile",
-    name: "User Profile",
-    rtlName: "ملف تعريفي للمستخدم",
-    icon: "tim-icons icon-single-02",
-    component: UserProfile,
-    layout: "/admin",
-  },
-  {
-    path: "/tables",
-    name: "Table List",
-    rtlName: "قائمة الجدول",
-    icon: "tim-icons icon-puzzle-10",
-    component: TableList,
-    layout: "/admin",
-  },
-  {
-    path: "/typography",
-    name: "Typography",
-    rtlName: "طباعة",
-    icon: "tim-icons icon-align-center",
-    component: Typography,
     layout: "/admin",
   },
 ];

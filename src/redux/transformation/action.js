@@ -1,6 +1,7 @@
 import { deploy_service } from "../../utils/process";
 import { Particle, sendParticle, subscribeToEvent } from "@fluencelabs/fluence";
-import { transformationsStore } from "../../utils/localStorage";
+import { datasetsStore, transformationsStore } from "../../utils/localStorage";
+import { RESULT_DATASET, SET_DATASET } from "../dataset/action";
 
 export const INIT_TRANSFORMATIONS = "INIT_TRANSFORMATIONS";
 export const SET_TRANSFORMATION = "SET_TRANSFORMATION";
@@ -18,7 +19,7 @@ export const initTransformations = () => async (dispatch, getState) => {
   dispatch({ type: INIT_TRANSFORMATIONS, payload: { objects }});
 }
 
-export const postTransformation = (transformationName, transformationDescription, transformationNbrInputs, transformationFile) => async (dispatch, getState) => {
+export const postTransformation = (transformationName, transformationDescription, transformationFile) => async (dispatch, getState) => {
   const ipfs = getState().ipfs.ipfs;
 
   const file = await ipfs.add(transformationFile);
@@ -30,16 +31,16 @@ export const postTransformation = (transformationName, transformationDescription
         file: transformationFile,
         name: transformationName,
         desc: transformationDescription,
-        nbrInputs: transformationNbrInputs
       }
     );
 
 
-    dispatch({ type: SET_TRANSFORMATION, payload: {name: transformationName, desc: transformationDescription, file: transformationFile, cid: file.cid.toString(), nbrInputs: transformationNbrInputs }});
+    dispatch({ type: SET_TRANSFORMATION, payload: {name: transformationName, desc: transformationDescription, file: transformationFile, cid: file.cid.toString() }});
 }
 
-export const runTransformation = (transformationCID, functionName) => async (dispatch, getState) => {
-    const { rpcAddress } = getState().ipfs;
+export const runTransformation = (transformationCID, datasetCID) => async (dispatch, getState) => {
+    const { rpcAddress, ipfs } = getState().ipfs;
+    const dataset = getState().dataset.objects[datasetCID];
     const { client, environment } = getState().fluence
 
     let serviceId = await deploy_service(
@@ -49,26 +50,50 @@ export const runTransformation = (transformationCID, functionName) => async (dis
       { ttl: 10000 }
     );
 
-    // TODO smthing else than main ?
-    // TODO call dispatch
-    subscribeToEvent(client, 'helloService', 'helloFunction', (args) => {
+    subscribeToEvent(client, 'helloService', 'helloFunction', async(args) => {
         const [networkInfo] = args;
-        console.log(args, networkInfo);
+
+        const file = await ipfs.add(JSON.stringify(networkInfo));
+
+        // Update parent dataset w/ new transformation
+        const newHistory = dataset.history;
+        newHistory.push({
+          transformation: transformationCID,
+          result: {
+            cid: file.cid.toString(),
+            jsonString: JSON.stringify(networkInfo)
+          }
+        })
+        await datasetsStore.setItem(
+          datasetCID,
+          {
+            jsonString: dataset.jsonString,
+            name: dataset.name,
+            history: newHistory
+          }
+        );
+
+        // Update redux store
+        dispatch({
+          type: RESULT_DATASET,
+          payload: {
+            transformation: transformationCID,
+            input: datasetCID,
+            history: newHistory
+          }});
     });
 
     const particle = new Particle(
       `
                   (seq
-                    (call relay (service function) [arg_1 arg_2] result)
+                    (call relay (service "transformation") [arg_0] result)
                     (call %init_peer_id% ("helloService" "helloFunction") [result])
                   )
               `,
       {
           relay: environment[0].peerId,
           service: serviceId,
-          function: functionName,
-          arg_1: { field_0: 0 },
-          arg_2: 15
+          arg_0: JSON.parse(dataset.jsonString.replace(/\n/g, ""))
       },
     );
     await sendParticle(client, particle);
