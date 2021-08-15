@@ -24,7 +24,7 @@ export const postTransformation = (transformationName, transformationDescription
 
   const file = await ipfs.add(transformationFile);
 
-    // Add to local storage
+  // Add to local storage
     await transformationsStore.setItem(
       file.cid.toString(),
       {
